@@ -1,0 +1,28 @@
+name: CI
+
+# 브랜치 푸시나 PR 이벤트 때 실행
+on:
+  push:
+    branches:
+      - main
+      - dev
+      - feature-*
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+
+      - name: Build & Run Tests
+        run: ./gradlew clean test
