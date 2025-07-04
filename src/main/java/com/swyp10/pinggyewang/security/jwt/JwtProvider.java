@@ -1,5 +1,6 @@
 package com.swyp10.pinggyewang.security.jwt;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -13,7 +14,7 @@ import javax.crypto.SecretKey;
 import org.springframework.stereotype.Component;
 
 @Component
-public class JwtProvider {
+public class JwtProvider implements TokenIssuer, TokenParser{
 
   private final JwtProperties jwtProperties;
 
@@ -25,6 +26,7 @@ public class JwtProvider {
     return Keys.hmacShaKeyFor(jwtProperties.secretKey().getBytes(StandardCharsets.UTF_8));
   }
 
+  @Override
   public String issue(Long userId, String email, List<String> roles) {
     Map<String, Object> claims = new HashMap<>();
     claims.put("email", email);
@@ -40,5 +42,14 @@ public class JwtProvider {
         .setExpiration(Date.from(expiryInstant))
         .signWith(getSigningKey(), SignatureAlgorithm.HS256)
         .compact();
+  }
+
+  @Override
+  public Claims parse(final String token) {
+    return Jwts.parserBuilder()
+        .setSigningKey(getSigningKey())
+        .build()
+        .parseClaimsJws(token)
+        .getBody();
   }
 }

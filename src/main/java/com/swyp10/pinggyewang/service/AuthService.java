@@ -7,6 +7,7 @@ import com.swyp10.pinggyewang.exception.AuthException;
 import com.swyp10.pinggyewang.exception.CustomErrorCode;
 import com.swyp10.pinggyewang.repository.UserRepository;
 import com.swyp10.pinggyewang.security.jwt.JwtProvider;
+import com.swyp10.pinggyewang.security.jwt.TokenIssuer;
 import java.util.List;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,13 +16,13 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
   private final UserRepository userRepository;
-  private final JwtProvider jwtProvider;
+  private final TokenIssuer tokenIssuer;
   private final PasswordEncoder passwordEncoder;
 
-  public AuthService(final UserRepository userRepository, final JwtProvider jwtProvider,
+  public AuthService(final UserRepository userRepository, final TokenIssuer tokenIssuer,
       final PasswordEncoder passwordEncoder) {
     this.userRepository = userRepository;
-    this.jwtProvider = jwtProvider;
+    this.tokenIssuer = tokenIssuer;
     this.passwordEncoder = passwordEncoder;
   }
 
@@ -33,6 +34,6 @@ public class AuthService {
       throw new AuthException(CustomErrorCode.PASSWORD_NOT_MATCHES);
     }
 
-    return jwtProvider.issue(user.getId(), user.getEmail(), List.of(user.getRole().name()));
+    return tokenIssuer.issue(user.getId(), user.getEmail(), List.of(user.getRole().name()));
   }
 }

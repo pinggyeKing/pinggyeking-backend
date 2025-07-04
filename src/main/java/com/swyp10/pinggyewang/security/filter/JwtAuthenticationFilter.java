@@ -1,8 +1,8 @@
 package com.swyp10.pinggyewang.security.filter;
 
-import com.swyp10.pinggyewang.security.jwt.JwtDecoder;
 import com.swyp10.pinggyewang.security.jwt.JwtToPrincipalConverter;
 import com.swyp10.pinggyewang.security.authentication.UserPrincipalAuthenticationToken;
+import com.swyp10.pinggyewang.security.jwt.TokenParser;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,12 +20,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   private static final String BEARER_PREFIX = "Bearer ";
   public static final int BEGIN_INDEX = 7;
 
-  private final JwtDecoder jwtDecoder;
+  private final TokenParser tokenParser;
   private final JwtToPrincipalConverter jwtToPrincipalConverter;
 
-  public JwtAuthenticationFilter(final JwtDecoder jwtDecoder,
+  public JwtAuthenticationFilter(final TokenParser tokenParser,
       final JwtToPrincipalConverter jwtToPrincipalConverter) {
-    this.jwtDecoder = jwtDecoder;
+    this.tokenParser = tokenParser;
     this.jwtToPrincipalConverter = jwtToPrincipalConverter;
   }
 
@@ -35,7 +35,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       throws ServletException, IOException {
 
     extractTokenFromRequest(request)
-        .map(jwtDecoder::decode)
+        .map(tokenParser::parse)
         .map(jwtToPrincipalConverter::convert)
         .map(UserPrincipalAuthenticationToken::new)
         .ifPresent(authentication -> {
