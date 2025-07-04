@@ -18,7 +18,6 @@ public class DataSeeder {
     return args -> {
       if (userRepository.existsByEmail("test@gmail.com")) return;
 
-      // 현재 User 생성자에 맞춤
       User testUser = new User("testuser", passwordEncoder.encode("1234"), "test@gmail.com");
       userRepository.save(testUser);
 
