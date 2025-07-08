@@ -44,8 +44,9 @@ public class WebSecurityConfig {
                 .requestMatchers("/").permitAll()
                 .requestMatchers("/auth/login").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
-                .requestMatchers("/error").permitAll()  // 에러 페이지 허용
-                .requestMatchers("/favicon.ico").permitAll()  // 파비콘 허용
+                .requestMatchers("/error").permitAll()
+                .requestMatchers("/favicon.ico").permitAll()
+                .requestMatchers("/api/feedback").permitAll()
                 .anyRequest().authenticated()
         )
         .headers(headers -> headers
