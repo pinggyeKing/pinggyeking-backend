@@ -43,6 +43,7 @@ public class WebSecurityConfig {
             auth
                 .requestMatchers("/").permitAll()
                 .requestMatchers("/auth/login").permitAll()
+                .requestMatchers("/api/clova/*").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/error").permitAll()
                 .requestMatchers("/favicon.ico").permitAll()
