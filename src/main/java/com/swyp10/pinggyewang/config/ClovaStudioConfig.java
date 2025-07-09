@@ -7,6 +7,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.UUID;
+
 @Configuration
 public class ClovaStudioConfig {
 
@@ -16,16 +18,15 @@ public class ClovaStudioConfig {
     @Value("${clova.api.key}")
     private String apiKey;
 
-    @Value("${clova.api.request-id}")
-    private String requestId;
-
     @Bean
     public WebClient clovaWebClient() {
+
         return WebClient.builder()
                 .baseUrl(apiUrl)
                 .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + apiKey)
-                .defaultHeader("X-NCP-CLOVASTUDIO-REQUEST-ID", requestId)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .defaultHeader("X-NCP-CLOVASTUDIO-REQUEST-ID", UUID.randomUUID().toString())
+                .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .build();
 
     }
