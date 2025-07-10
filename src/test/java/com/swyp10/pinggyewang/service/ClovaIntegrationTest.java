@@ -9,12 +9,14 @@ import com.swyp10.pinggyewang.dto.response.ExcuseResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
+@ActiveProfiles("test")
 class ClovaIntegrationTest {
 
     @Autowired
-    private ClovaService clovaService;
+    private ExcuseGenerator excuseGenerator;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -27,7 +29,7 @@ class ClovaIntegrationTest {
 
         ExcuseRequest request = new ExcuseRequest(situation, target, tone);
 
-        ExcuseResponse response = clovaService.generateSentence(request);
+        ExcuseResponse response = excuseGenerator.generateSentence(request);
 
         System.out.println("====== AI 응답 ======");
         System.out.println(response);
