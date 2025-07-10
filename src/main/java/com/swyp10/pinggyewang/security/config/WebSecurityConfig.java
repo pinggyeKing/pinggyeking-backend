@@ -48,6 +48,7 @@ public class WebSecurityConfig {
                 .requestMatchers("/error").permitAll()
                 .requestMatchers("/favicon.ico").permitAll()
                 .requestMatchers("/api/feedback").permitAll()
+                .requestMatchers("/api/excuses/**").permitAll()
                 .anyRequest().authenticated()
         )
         .headers(headers -> headers

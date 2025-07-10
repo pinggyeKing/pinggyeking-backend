@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.swyp10.pinggyewang.dto.request.ExcuseRequest;
 import com.swyp10.pinggyewang.dto.response.ExcuseResponse;
+import com.swyp10.pinggyewang.repository.ExcuseRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
