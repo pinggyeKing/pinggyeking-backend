@@ -6,7 +6,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.swyp10.pinggyewang.dto.request.ExcuseRequest;
 import com.swyp10.pinggyewang.dto.response.ExcuseResponse;
-import com.swyp10.pinggyewang.repository.ExcuseRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class ClovaIntegrationTest {
 
     @Autowired
-    private ClovaService clovaService;
+    private ExcuseGenerator excuseGenerator;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -28,7 +27,7 @@ class ClovaIntegrationTest {
 
         ExcuseRequest request = new ExcuseRequest(situation, target, tone);
 
-        ExcuseResponse response = clovaService.generateSentence(request);
+        ExcuseResponse response = excuseGenerator.generateSentence(request);
 
         System.out.println("====== AI 응답 ======");
         System.out.println(response);
