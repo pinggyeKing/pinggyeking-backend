@@ -11,6 +11,7 @@ import com.swyp10.pinggyewang.repository.ExcuseRepository;
 import java.time.Duration;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -20,7 +21,8 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class ClovaService {
+@Profile("!dev")
+public class ClovaService implements ExcuseGenerator {
 
   private static final String MODEL_NAME = "HCX-005";
   private static final int MAX_TOKENS = 512;
@@ -45,6 +47,7 @@ public class ClovaService {
     this.excuseRepository = excuseRepository;
   }
 
+  @Override
   public ExcuseResponse generateSentence(ExcuseRequest request) {
     try {
       String requestBody = buildRequestBody(request);

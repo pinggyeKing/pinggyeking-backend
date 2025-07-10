@@ -1,6 +1,8 @@
 spring:
   application:
     name: pinggye-wang
+  profiles:
+    active: dev # 기본 dev -> 운영 prod
   jpa:
     hibernate:
       ddl-auto: update
@@ -10,35 +12,17 @@ spring:
         format_sql: true
     defer-datasource-initialization: true
 
-  datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-      settings:
-        web-allow-others: true
-        trace: false
-
 logging:
   level:
     com.swyp10.pinggyewang: DEBUG
-    org.springframework.security: DEBUG
 
 jwt:
   secret: testsecretkey1234567890testsecretkey1234567890testsecretkey1234567890
   expiration: 86400000
 
 clova:
-  api:
-    url: https://clovastudio.stream.ntruss.com/testapp/v3/chat-completions/HCX-005
-    key: nv-d6eadc1a642f46d2834ffdb0c1e11e07flHE # test api key
   system-prompt: |-
-    당신은 “핑계 생성기” AI입니다.
+    당신은 "핑계 생성기" AI입니다.
     JSON 입력으로 "situation", "target", "tone" 키가 주어지면, 반드시 아래 정확한 스키마에 따라 JSON으로만 응답해야 합니다.
     
     {
@@ -55,4 +39,3 @@ clova:
       "response_time_ms": number,
       "created_at": string
     }
-
