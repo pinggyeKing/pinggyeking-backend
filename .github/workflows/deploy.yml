@@ -12,7 +12,14 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Build with Gradle
-        run: ./gradlew clean build --no-daemon
+        run: |
+          chmod +x ./gradlew
+          ./gradlew clean build --no-daemon
+
+      - name: Verify artifact
+        run: |
+          echo "=== Listing build/libs ==="
+          ls -l build/libs || echo "No artifacts found in build/libs"
 
       - name: Copy JAR to server
         uses: appleboy/scp-action@v0.1.4
@@ -20,7 +27,7 @@ jobs:
           host: ${{ secrets.NCP_HOST }}
           username: ${{ secrets.NCP_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: build/libs/*.jar
+          source: build/libs/pinggye-wang-0.0.1-SNAPSHOT*.jar
           target: /home/ubuntu/pinggyeking-backend/
 
       - name: Restart service on server
