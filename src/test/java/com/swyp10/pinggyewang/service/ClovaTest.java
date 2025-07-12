@@ -6,6 +6,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.swyp10.pinggyewang.dto.request.ExcuseRequest;
 import com.swyp10.pinggyewang.dto.response.ExcuseResponse;
+import com.swyp10.pinggyewang.service.mock.MockExcuseGenerator;
+import com.swyp10.pinggyewang.service.mock.TestClovaService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,10 +15,11 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class ClovaIntegrationTest {
+class ClovaTest {
 
-    @Autowired
-    private ExcuseGenerator excuseGenerator;
+    private final MockExcuseGenerator mockExcuseGenerator = new MockExcuseGenerator();
+
+    private final ExcuseGenerator excuseGenerator = new TestClovaService(mockExcuseGenerator);
 
     @Autowired
     private ObjectMapper objectMapper;
