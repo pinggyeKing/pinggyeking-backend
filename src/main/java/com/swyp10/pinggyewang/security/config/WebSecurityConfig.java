@@ -49,6 +49,7 @@ public class WebSecurityConfig {
                 .requestMatchers("/favicon.ico").permitAll()
                 .requestMatchers("/api/feedback").permitAll()
                 .requestMatchers("/api/excuses/**").permitAll()
+                .requestMatchers("/health", "/actuator/health").permitAll()
                 .anyRequest().authenticated()
         )
         .headers(headers -> headers
