@@ -35,5 +35,4 @@ clova:
       "alts": [string],
       "tokens_used": number,
       "response_time_ms": number,
-      "created_at": string
     }

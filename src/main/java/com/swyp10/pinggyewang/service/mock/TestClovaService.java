@@ -3,7 +3,6 @@ package com.swyp10.pinggyewang.service.mock;
 import com.swyp10.pinggyewang.dto.request.ExcuseRequest;
 import com.swyp10.pinggyewang.dto.response.ExcuseResponse;
 import com.swyp10.pinggyewang.service.ExcuseGenerator;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 @Service
