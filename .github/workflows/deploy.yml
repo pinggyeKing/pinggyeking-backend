@@ -2,7 +2,7 @@ name: CD to NCP Instance
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ dev, feature-ai ]
 
 jobs:
   build-and-deploy:
