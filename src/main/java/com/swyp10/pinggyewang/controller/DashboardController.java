@@ -1,5 +1,6 @@
 package com.swyp10.pinggyewang.controller;
 
+import com.swyp10.pinggyewang.service.ExcuseService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,16 +17,16 @@ import java.util.Map;
 @RequestMapping("/admin")
 public class DashboardController {
 
+  private final ExcuseService excuseService;
+
+  public DashboardController(final ExcuseService excuseService) {
+    this.excuseService = excuseService;
+  }
+
   @GetMapping("/dashboard")
   public String dashboard(Model model) {
     // 가짜 통계 데이터 생성
-    Map<String, Object> stats = new HashMap<>();
-    stats.put("totalExcuses", 15847);
-    stats.put("todayExcuses", 234);
-    stats.put("avgCredibilityScore", 7.2);
-    stats.put("avgResponseTime", 1247);
-    stats.put("totalTokensUsed", 892341);
-    stats.put("activeUsers", 3421);
+    Map<String, Object> stats = excuseService.getDashboardStats();
 
     model.addAttribute("stats", stats);
 
