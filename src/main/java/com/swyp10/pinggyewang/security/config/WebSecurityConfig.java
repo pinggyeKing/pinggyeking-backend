@@ -50,6 +50,7 @@ public class WebSecurityConfig {
                 .requestMatchers("/api/feedback").permitAll()
                 .requestMatchers("/api/excuses/**").permitAll()
                 .requestMatchers("/health", "/actuator/health").permitAll()
+                .requestMatchers("/admin/**").permitAll()
                 .anyRequest().authenticated()
         )
         .headers(headers -> headers
