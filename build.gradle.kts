@@ -22,6 +22,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation ("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
     runtimeOnly("com.h2database:h2")
     runtimeOnly("com.mysql:mysql-connector-j")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -42,6 +44,7 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.26")
     testCompileOnly("org.projectlombok:lombok:1.18.26")
     testAnnotationProcessor("org.projectlombok:lombok:1.18.26")
+
 
 }
 
