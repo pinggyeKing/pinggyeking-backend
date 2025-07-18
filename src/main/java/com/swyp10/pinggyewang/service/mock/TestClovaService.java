@@ -15,7 +15,7 @@ public class TestClovaService implements ExcuseGenerator {
   }
 
   @Override
-  public ExcuseResponse generateSentence(ExcuseRequest request) {
+  public ExcuseResponse generateSentence(final ExcuseRequest request) {
     return mockExcuseGenerator.generateMockResponse(request);
   }
 }
