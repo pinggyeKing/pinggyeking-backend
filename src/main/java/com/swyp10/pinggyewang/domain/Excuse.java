@@ -1,6 +1,7 @@
 package com.swyp10.pinggyewang.domain;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -51,22 +52,22 @@ public class Excuse {
   @Column(name = "response_time_ms")
   private Long responseTimeMs;
 
-  @Column(name = "ai_created_at")
-  private OffsetDateTime aiCreatedAt;
+  @Column(name = "is_regenerated", columnDefinition = "TINYINT(1)")
+  private Boolean isRegenerated;
 
   @CreationTimestamp
   @Column(name = "created_at", nullable = false, updatable = false)
-  private OffsetDateTime createdAt;
+  private LocalDateTime createdAt;
 
   @UpdateTimestamp
   @Column(name = "updated_at")
-  private OffsetDateTime updatedAt;
+  private LocalDateTime updatedAt;
 
   @Builder
   public Excuse(String situation, String target, String tone, String excuse,
       String credibilityWhy, Double credibilityScore, String category,
       String keywords, String alternatives, Integer tokensUsed,
-      Long responseTimeMs, OffsetDateTime aiCreatedAt) {
+      Long responseTimeMs, Boolean isRegenerated) {
     this.situation = situation;
     this.target = target;
     this.tone = tone;
@@ -78,7 +79,7 @@ public class Excuse {
     this.alternatives = alternatives;
     this.tokensUsed = tokensUsed;
     this.responseTimeMs = responseTimeMs;
-    this.aiCreatedAt = aiCreatedAt;
+    this.isRegenerated = isRegenerated;
   }
 
   public Long getId() {
@@ -129,15 +130,15 @@ public class Excuse {
     return responseTimeMs;
   }
 
-  public OffsetDateTime getAiCreatedAt() {
-    return aiCreatedAt;
-  }
-
-  public OffsetDateTime getCreatedAt() {
+  public LocalDateTime getCreatedAt() {
     return createdAt;
   }
 
-  public OffsetDateTime getUpdatedAt() {
+  public LocalDateTime getUpdatedAt() {
     return updatedAt;
+  }
+
+  public Boolean getIsRegenerated() {
+    return isRegenerated;
   }
 }

@@ -2,6 +2,8 @@ package com.swyp10.pinggyewang.service;
 
 import com.swyp10.pinggyewang.dto.response.ExcuseCountResponse;
 import com.swyp10.pinggyewang.dto.response.ExcuseResponse;
+import com.swyp10.pinggyewang.dto.response.ExcuseStatisticsResponse;
+import com.swyp10.pinggyewang.dto.response.PeakTimeResponse;
 import com.swyp10.pinggyewang.repository.ExcuseRepository;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
@@ -37,29 +39,39 @@ public class ExcuseService {
         .toList();
   }
 
-  public Map<String, Object> getDashboardStats() {
-    List<Object[]> results = excuseRepository.findDashboardStats();
+  public ExcuseStatisticsResponse getStatistics() {
+    List<Object[]> basicStatsList = excuseRepository.getBasicStatistics();
 
-    Object[] row = results.get(0);
+    Long totalCount = 0L;
+    Double averageSatisfaction = 0.0;
+    Long regeneratedCount = 0L;
 
-    Map<String, Object> stats = new HashMap<>();
-    stats.put("totalExcuses", ((Number) row[0]).longValue());
-    stats.put("todayExcuses", ((Number) row[1]).longValue());
-    stats.put("avgCredibilityScore", ((Number) row[2]).doubleValue());
-    stats.put("avgResponseTime", ((Number) row[3]).longValue());
-    stats.put("totalTokensUsed", ((Number) row[4]).longValue());
-    stats.put("activeUsers", ((Number) row[5]).longValue());
+    if (!basicStatsList.isEmpty()) {
+      Object[] basicStats = basicStatsList.get(0); // 첫 번째 행 가져오기
+      totalCount = ((Number) basicStats[0]).longValue();
+      averageSatisfaction = basicStats[1] != null ? ((Number) basicStats[1]).doubleValue() : 0.0;
+      regeneratedCount = ((Number) basicStats[2]).longValue();
+    }
 
-    return stats;
-  }
+    double regenerationRate = totalCount > 0 ?
+        (regeneratedCount.doubleValue() / totalCount.doubleValue()) * 100 : 0.0;
 
-  private Long safeConvertToLong(Object value) {
-    if (value == null) return 0L;
-    return ((Number) value).longValue();
-  }
+    List<Object[]> peakTimeList = excuseRepository.getPeakTimeStatistics();
+    PeakTimeResponse peakTime = null;
 
-  private Double safeConvertToDouble(Object value) {
-    if (value == null) return 0.0;
-    return ((Number) value).doubleValue();
+    if (!peakTimeList.isEmpty()) {
+      Object[] peakTimeData = peakTimeList.get(0);
+      peakTime = new PeakTimeResponse(
+          ((Number) peakTimeData[0]).intValue(),
+          ((Number) peakTimeData[1]).longValue()
+      );
+    }
+
+    return new ExcuseStatisticsResponse(
+        totalCount,
+        Math.round(averageSatisfaction * 100.0) / 100.0,
+        Math.round(regenerationRate * 100.0) / 100.0,
+        peakTime
+    );
   }
 }

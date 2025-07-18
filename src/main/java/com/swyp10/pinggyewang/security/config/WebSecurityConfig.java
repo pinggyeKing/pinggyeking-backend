@@ -43,7 +43,7 @@ public class WebSecurityConfig {
             auth
                 .requestMatchers("/").permitAll()
                 .requestMatchers("/auth/login").permitAll()
-                .requestMatchers("/api/clova/*").permitAll()
+                .requestMatchers("/api/clova/**").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/error").permitAll()
                 .requestMatchers("/favicon.ico").permitAll()
@@ -51,6 +51,7 @@ public class WebSecurityConfig {
                 .requestMatchers("/api/excuses/**").permitAll()
                 .requestMatchers("/health", "/actuator/health").permitAll()
                 .requestMatchers("/admin/**").permitAll()
+                .requestMatchers("/api/dashboard").permitAll()
                 .anyRequest().authenticated()
         )
         .headers(headers -> headers

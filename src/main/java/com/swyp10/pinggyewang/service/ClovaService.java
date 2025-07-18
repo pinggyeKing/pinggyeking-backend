@@ -12,7 +12,6 @@ import java.time.Duration;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -49,14 +48,14 @@ public class ClovaService implements ExcuseGenerator {
   }
 
   @Override
-  public ExcuseResponse generateSentence(ExcuseRequest request) {
+  public ExcuseResponse generateSentence(final ExcuseRequest request) {
     try {
       String requestBody = buildRequestBody(request);
       String apiResponse = callClovaApi(requestBody);
       String extractedContent = extractContentFromResponse(apiResponse);
       ExcuseResponse response = parseExcuseResponse(extractedContent);
 
-      excuseRepository.save(response.toDomain());
+      excuseRepository.save(response.toExcuse(request.isRegenerated()));
 
       return response;
     } catch (Exception e) {

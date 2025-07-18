@@ -29,8 +29,9 @@ class ClovaTest {
         final String situation = "회의에 늦음";
         final String target = "팀장님";
         final String tone = "정중하게";
+        final boolean isRegenerated = false;
 
-        ExcuseRequest request = new ExcuseRequest(situation, target, tone);
+        ExcuseRequest request = new ExcuseRequest(situation, target, tone, isRegenerated);
 
         ExcuseResponse response = excuseGenerator.generateSentence(request);
 

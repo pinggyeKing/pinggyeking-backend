@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.swyp10.pinggyewang.domain.Excuse;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -29,9 +30,9 @@ public record ExcuseResponse(
     Long responseTimeMs,
 
     @JsonProperty("created_at")
-    OffsetDateTime createdAt
+    LocalDateTime createdAt
 ) {
-    public Excuse toDomain() {
+    public Excuse toExcuse(final boolean isRegenerated) {
         return Excuse.builder()
             .situation(this.situation)
             .target(this.target)
@@ -44,7 +45,7 @@ public record ExcuseResponse(
             .alternatives(listToJson(this.alts))
             .tokensUsed(this.tokensUsed)
             .responseTimeMs(this.responseTimeMs)
-            .aiCreatedAt(this.createdAt)
+            .isRegenerated(isRegenerated)
             .build();
     }
 
@@ -61,7 +62,7 @@ public record ExcuseResponse(
             jsonToList(excuse.getAlternatives()),
             excuse.getTokensUsed(),
             excuse.getResponseTimeMs(),
-            excuse.getAiCreatedAt()
+            excuse.getCreatedAt()
         );
     }
 

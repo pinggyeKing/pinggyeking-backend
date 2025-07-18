@@ -61,7 +61,6 @@ class ExcuseServiceTest {
         .alternatives("[\"차가 고장났습니다\"]")
         .tokensUsed(100)
         .responseTimeMs(2000L)
-        .aiCreatedAt(OffsetDateTime.now())
         .build();
 
     given(excuseRepository.findAll()).willReturn(List.of(excuse));
