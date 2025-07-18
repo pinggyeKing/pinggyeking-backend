@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    url: jdbc:mysql://db-35uo47-kr.vpc-pub-cdb.ntruss.com:3306/pinggyewang_dev?useSSL=false&sslMode=DISABLED&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
+    username: swyp
+    password: tmdnlvm7!
+  jpa:
+    show-sql: true
+
+logging:
+  level:
+    # 커넥션 풀
+    com.zaxxer.hikari: DEBUG
+    # 드라이버 매니저 커넥션 프로바이더
+    org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl: DEBUG
+
+server:
+  address: 0.0.0.0
+  port: 8080
+
+management:
+  server:
+    port: 8080
+    base-path: /
+  endpoints:
+    web:
+      exposure:
+        include: health
