@@ -28,7 +28,7 @@ jobs:
           username: ${{ secrets.NCP_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: build/libs/pinggye-wang-0.0.1-SNAPSHOT.jar
-          target: /home/ubuntu/pinggyeking-backend/
+          target: /root/app
 
       - name: Restart service on server
         uses: appleboy/ssh-action@v0.1.8
