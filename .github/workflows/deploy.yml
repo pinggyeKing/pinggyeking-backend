@@ -37,5 +37,5 @@ jobs:
           username: ${{ secrets.NCP_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /home/ubuntu/pinggyeking-backend
+            cd /root/app
             ./deploy.sh
