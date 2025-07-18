@@ -29,10 +29,15 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | tail -n3
 
       - name: DEBUG Print NCP_HOST
-        run: echo "NCP_HOST is >>${{ secrets.NCP_HOST }}<<"
+        run: |
+          HOST="${{ secrets.NCP_HOST }}"
+          echo "Length: $(echo -n "$HOST" | wc -c)"
+          echo "Chars: $(echo -n "$HOST" | sed 's/./& /g')"
 
       - name: Test SSH connectivity
         run: |
+          echo "→ Trying ssh -vvv"
+          ssh -vvv -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.NCP_HOST }} "echo SSH OK"
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
