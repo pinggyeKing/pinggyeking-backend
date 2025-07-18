@@ -28,6 +28,9 @@ jobs:
           echo "=== tail of SSH_PRIVATE_KEY ==="
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | tail -n3
 
+      - name: DEBUG Print NCP_HOST
+        run: echo "NCP_HOST is >>${{ secrets.NCP_HOST }}<<"
+
       - name: Test SSH connectivity
         run: |
           mkdir -p ~/.ssh
