@@ -21,27 +21,23 @@ jobs:
           echo "=== Listing build/libs ==="
           ls -l build/libs || echo "No artifacts found in build/libs"
 
-      - name: Debug SSH key in runner
+      - name: Setup SSH key
         run: |
-          echo "=== head of SSH_PRIVATE_KEY ==="
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | head -n3
-          echo "=== tail of SSH_PRIVATE_KEY ==="
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tail -n3
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
 
       - name: DEBUG Print NCP_HOST
         run: |
-          HOST="${{ secrets.NCP_HOST }}"
-          echo "Length: $(echo -n "$HOST" | wc -c)"
-          echo "Chars: $(echo -n "$HOST" | sed 's/./& /g')"
+          echo ">>${{ secrets.NCP_HOST }}<<"
+          echo -n "${{ secrets.NCP_HOST }}" | wc -c
 
       - name: Test SSH connectivity
         run: |
-          echo "→ Trying ssh -vvv"
-          ssh -vvv -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.NCP_HOST }} "echo SSH OK"
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.NCP_HOST }} "echo SSH OK"
+          ssh -vvv -o StrictHostKeyChecking=no \
+          -i ~/.ssh/id_rsa \
+          root@${{ secrets.NCP_HOST }} \
+          "echo SSH OK"
       - name: Copy JAR to server
         uses: appleboy/scp-action@v0.1.4
         with:
