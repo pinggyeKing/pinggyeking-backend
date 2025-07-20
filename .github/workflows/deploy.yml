@@ -39,7 +39,7 @@ jobs:
 
       # 2) 배포 스크립트 실행 (ssh-action)
       - name: Deploy on NCP
-        uses: appleboy/ssh-action@v1.2.6
+        uses: appleboy/ssh-action@v0.1.8
         with:
           host:     ${{ secrets.NCP_HOST }}
           username: ${{ secrets.NCP_USER }}
