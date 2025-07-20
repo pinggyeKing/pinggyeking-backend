@@ -2,6 +2,7 @@ package com.swyp10.pinggyewang.service.mock;
 
 import com.swyp10.pinggyewang.dto.request.ExcuseRequest;
 import com.swyp10.pinggyewang.dto.response.ExcuseResponse;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 import org.springframework.stereotype.Component;
@@ -25,7 +26,7 @@ public class MockExcuseGenerator {
         ),  // alts
         10,  // tokensUsed
         300L,  // responseTimeMs
-        OffsetDateTime.now()  // createdAt
+        LocalDateTime.now()  // createdAt
     );
   }
 }

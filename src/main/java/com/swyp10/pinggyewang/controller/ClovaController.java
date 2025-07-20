@@ -11,16 +11,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ClovaController {
 
-    private final ExcuseGenerator excuseGenerator;
+  private final ExcuseGenerator excuseGenerator;
 
-    public ClovaController(ExcuseGenerator excuseGenerator){
-        this.excuseGenerator = excuseGenerator;
-    }
+  public ClovaController(ExcuseGenerator excuseGenerator) {
+    this.excuseGenerator = excuseGenerator;
+  }
 
-    @PostMapping("/api/clova/generate")
-    public ResponseEntity<ExcuseResponse> textGenerate(
-            @RequestBody ExcuseRequest request) {
-        ExcuseResponse response = excuseGenerator.generateSentence(request);
-        return ResponseEntity.ok(response);
-    }
+  @PostMapping("/api/clova/generate")
+  public ResponseEntity<ExcuseResponse> textGenerate(@RequestBody ExcuseRequest request) {
+    ExcuseResponse response = excuseGenerator.generateSentence(request);
+    return ResponseEntity.ok(response);
+  }
 }
