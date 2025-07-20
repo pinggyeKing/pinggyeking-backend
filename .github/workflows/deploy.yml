@@ -25,16 +25,10 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H "${{ secrets.NCP_HOST }}" >> ~/.ssh/known_hosts
 
-      - name: Test SSH connectivity
-        run: |
-          ssh -vvv -o StrictHostKeyChecking=no \
-              -i ~/.ssh/id_rsa \
-              "${{ secrets.NCP_USER }}"@"${{ secrets.NCP_HOST }}" \
-              "echo 'SSH OK on $(hostname)'"
-      - name: Debug local artifacts
-        run: |
-          echo "=== Local build/libs contents ==="
-          ls -lh build/libs
+      - name: Setup SSH agent
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Copy JAR to server
         uses: appleboy/scp-action@v0.1.4
@@ -43,9 +37,10 @@ jobs:
           username: ${{ secrets.NCP_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
-          file_glob: true
-          source: "build/libs/*.jar"
-          target: "/root/app/"
+          script: |
+            scp -o StrictHostKeyChecking=no \
+                build/libs/pinggye-wang-0.0.1-SNAPSHOT.jar \
+                root@${{ secrets.NCP_HOST }}:/root/app/
 
       - name: Debug remote artifacts
         run: |
