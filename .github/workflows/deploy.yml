@@ -43,8 +43,8 @@ jobs:
           username: ${{ secrets.NCP_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
-          source: build/libs/pinggye-wang-0.0.1-SNAPSHOT.jar
-          target: /root/app
+          source: "build/libs/pinggye-wang-0.0.1-SNAPSHOT.jar"
+          target: /root/app/
 
       - name: Debug remote artifacts
         run: |
