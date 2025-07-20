@@ -2,7 +2,7 @@ name: CD to NCP Instance
 
 on:
   push:
-    branches: [ dev, feature-ai ]
+    branches: [ dev, feature-cd ]
 
 jobs:
   build-and-deploy:
@@ -19,13 +19,11 @@ jobs:
       - name: Verify artifact
         run: ls -lh build/libs
 
-      # SSH 에이전트 설정 (키 등록)
       - name: Setup SSH agent
         uses: webfactory/ssh-agent@v0.5.4
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      # 1) JAR 파일 복사 (scp-action)
       - name: Copy JAR to server
         uses: appleboy/scp-action@v0.1.4
         with:
@@ -37,7 +35,6 @@ jobs:
           source:   "build/libs/*.jar"
           target:   "/root/app/"
 
-      # 2) 배포 스크립트 실행 (ssh-action)
       - name: Deploy on NCP
         uses: appleboy/ssh-action@v0.1.8
         with:
