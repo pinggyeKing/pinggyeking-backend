@@ -7,53 +7,48 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Build with Gradle
         run: |
           chmod +x ./gradlew
           ./gradlew clean build --no-daemon
 
-      - name: Verify artifact
-        run: |
-          echo "=== Listing build/libs ==="
-          ls -l build/libs || echo "No artifacts found in build/libs"
-
       - name: Setup SSH key
         run: |
           mkdir -p ~/.ssh
-          printf '%s\n' "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-
-      - name: DEBUG Print NCP_HOST
-        run: |
-          echo ">>${{ secrets.NCP_HOST }}<<"
-          echo -n "${{ secrets.NCP_HOST }}" | wc -c
+          ssh-keyscan -H "${{ secrets.NCP_HOST }}" >> ~/.ssh/known_hosts
 
       - name: Test SSH connectivity
         run: |
-          ssh -vvv -o StrictHostKeyChecking=no \
-          -i ~/.ssh/id_rsa \
-          root@${{ secrets.NCP_HOST }} \
-          "echo SSH OK"
+          ssh -o StrictHostKeyChecking=yes \
+              -i ~/.ssh/id_rsa \
+              "${{ secrets.NCP_USER }}"@"${{ secrets.NCP_HOST }}" \
+              "echo 'SSH OK on $(hostname)'"
       - name: Copy JAR to server
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.NCP_HOST }}
           username: ${{ secrets.NCP_USER }}
-          key: ~/.ssh/id_rsa
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           source: build/libs/pinggye-wang-0.0.1-SNAPSHOT.jar
           target: /root/app
 
-      - name: Restart service on server
+      - name: Deploy on NCP
         uses: appleboy/ssh-action@v0.1.8
         with:
           host: ${{ secrets.NCP_HOST }}
           username: ${{ secrets.NCP_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            set -e
             cd /root/app
+            chmod +x deploy.sh
             ./deploy.sh
