@@ -7,8 +7,6 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -18,45 +16,36 @@ jobs:
           chmod +x ./gradlew
           ./gradlew clean build --no-daemon
 
-      - name: Setup SSH key
-        run: |
-          mkdir -p ~/.ssh
-          printf '%s\n' "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H "${{ secrets.NCP_HOST }}" >> ~/.ssh/known_hosts
+      - name: Verify artifact
+        run: ls -lh build/libs
 
+      # SSH 에이전트 설정 (키 등록)
       - name: Setup SSH agent
         uses: webfactory/ssh-agent@v0.5.4
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      # 1) JAR 파일 복사 (scp-action)
       - name: Copy JAR to server
         uses: appleboy/scp-action@v0.1.4
         with:
-          host: ${{ secrets.NCP_HOST }}
+          host:     ${{ secrets.NCP_HOST }}
           username: ${{ secrets.NCP_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
-          script: |
-            scp -o StrictHostKeyChecking=no \
-                build/libs/pinggye-wang-0.0.1-SNAPSHOT.jar \
-                root@${{ secrets.NCP_HOST }}:/root/app/
+          key:      ${{ secrets.SSH_PRIVATE_KEY }}
+          port:     22
+          file_glob: true
+          source:   "build/libs/*.jar"
+          target:   "/root/app/"
 
-      - name: Debug remote artifacts
-        run: |
-          echo "=== Remote /root/app contents ==="
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no \
-            "${{ secrets.NCP_USER }}"@"${{ secrets.NCP_HOST }}" \
-            "ls -lh /root/app"
-
+      # 2) 배포 스크립트 실행 (ssh-action)
       - name: Deploy on NCP
-        uses: appleboy/ssh-action@v0.1.8
+        uses: appleboy/ssh-action@v1.2.6
         with:
-          host: ${{ secrets.NCP_HOST }}
+          host:     ${{ secrets.NCP_HOST }}
           username: ${{ secrets.NCP_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key:      ${{ secrets.SSH_PRIVATE_KEY }}
+          port:     22
           script: |
-            set -e
             cd /root/app
             chmod +x deploy.sh
             ./deploy.sh
