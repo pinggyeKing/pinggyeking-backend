@@ -18,12 +18,33 @@ jobs:
           chmod +x ./gradlew
           ./gradlew clean build --no-daemon
 
+      - name: Debug Base64 secret
+        run: |
+          echo "Secret length: $(echo -n "${{ secrets.SSH_PRIVATE_KEY_B64 }}" | wc -c)"
+          echo "Start: [$(echo "${{ secrets.SSH_PRIVATE_KEY_B64 }}" | head -c50)]"
+          echo "End:   [$(echo "${{ secrets.SSH_PRIVATE_KEY_B64 }}" | tail -c50)]"
+
       - name: Setup SSH key
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY_B64 }}" | base64 -d > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H "${{ secrets.NCP_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Debug decoded key
+        run: |
+          echo "=== Permissions & Filetype ==="
+          ls -l ~/.ssh/id_rsa
+          file ~/.ssh/id_rsa || true
+      
+          echo "=== Head (beginning) ==="
+          head -n5 ~/.ssh/id_rsa
+      
+          echo "=== Tail (end) ==="
+          tail -n5 ~/.ssh/id_rsa
+      
+          echo "=== Line count ==="
+          wc -l ~/.ssh/id_rsa
 
       - name: Test SSH connectivity
         run: |
