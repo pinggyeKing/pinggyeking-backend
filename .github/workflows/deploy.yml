@@ -31,6 +31,11 @@ jobs:
               -i ~/.ssh/id_rsa \
               "${{ secrets.NCP_USER }}"@"${{ secrets.NCP_HOST }}" \
               "echo 'SSH OK on $(hostname)'"
+      - name: Debug local artifacts
+        run: |
+          echo "=== Local build/libs contents ==="
+          ls -lh build/libs
+
       - name: Copy JAR to server
         uses: appleboy/scp-action@v0.1.4
         with:
@@ -40,6 +45,13 @@ jobs:
           port: 22
           source: build/libs/pinggye-wang-0.0.1-SNAPSHOT.jar
           target: /root/app
+
+      - name: Debug remote artifacts
+        run: |
+          echo "=== Remote /root/app contents ==="
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no \
+            "${{ secrets.NCP_USER }}"@"${{ secrets.NCP_HOST }}" \
+            "ls -lh /root/app"
 
       - name: Deploy on NCP
         uses: appleboy/ssh-action@v0.1.8
