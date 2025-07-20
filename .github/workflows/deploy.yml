@@ -44,8 +44,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           file_glob: true
-          source: "build/libs/pinggye-wang-0.0.1-SNAPSHOT.jar"
-          target: /root/app/
+          source: "build/libs/*.jar"
+          target: "/root/app/"
 
       - name: Debug remote artifacts
         run: |
