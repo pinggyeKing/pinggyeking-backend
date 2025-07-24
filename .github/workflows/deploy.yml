@@ -33,9 +33,11 @@ jobs:
           username: ${{ secrets.NCP_USER }}
           key:      ${{ secrets.SSH_PRIVATE_KEY }}
           port:     22
-          file_glob: true
           source:   "build/libs/*.jar"
           target:   "/root/app/"
+          overwrite: true
+          rm: false
+          debug: true
 
       # 2) 배포 스크립트 실행 (ssh-action)
       - name: Deploy on NCP
