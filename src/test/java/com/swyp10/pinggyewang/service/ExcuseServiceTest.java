@@ -4,6 +4,7 @@ import com.swyp10.pinggyewang.domain.Excuse;
 import com.swyp10.pinggyewang.dto.response.ExcuseCountResponse;
 import com.swyp10.pinggyewang.dto.response.ExcuseResponse;
 import com.swyp10.pinggyewang.repository.ExcuseRepository;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -39,7 +40,7 @@ class ExcuseServiceTest {
 
   @Test
   void getTodayCount_성공() {
-    given(excuseRepository.countByCreatedAtBetween(any(OffsetDateTime.class), any(OffsetDateTime.class)))
+    given(excuseRepository.countByCreatedAtBetween(any(LocalDateTime.class), any(LocalDateTime.class)))
         .willReturn(5L);
 
     ExcuseCountResponse result = excuseService.getTodayCount();

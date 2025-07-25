@@ -5,6 +5,7 @@ import com.swyp10.pinggyewang.dto.response.ExcuseResponse;
 import com.swyp10.pinggyewang.dto.response.ExcuseStatisticsResponse;
 import com.swyp10.pinggyewang.dto.response.PeakTimeResponse;
 import com.swyp10.pinggyewang.repository.ExcuseRepository;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -25,9 +26,9 @@ public class ExcuseService {
   }
 
   public ExcuseCountResponse getTodayCount() {
-    OffsetDateTime startOfDay = OffsetDateTime.now().withHour(0).withMinute(0).withSecond(0)
+    LocalDateTime startOfDay = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0)
         .withNano(0);
-    OffsetDateTime endOfDay = OffsetDateTime.now().withHour(23).withMinute(59).withSecond(59)
+    LocalDateTime endOfDay = LocalDateTime.now().withHour(23).withMinute(59).withSecond(59)
         .withNano(999999999);
 
     return new ExcuseCountResponse(excuseRepository.countByCreatedAtBetween(startOfDay, endOfDay));

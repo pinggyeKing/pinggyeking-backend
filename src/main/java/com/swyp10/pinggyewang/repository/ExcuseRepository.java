@@ -1,6 +1,7 @@
 package com.swyp10.pinggyewang.repository;
 
 import com.swyp10.pinggyewang.domain.Excuse;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ExcuseRepository extends JpaRepository<Excuse, Long> {
 
-  Long countByCreatedAtBetween(OffsetDateTime startDate, OffsetDateTime endDate);
+  Long countByCreatedAtBetween(LocalDateTime startDate, LocalDateTime endDate);
 
   @Query("SELECT " +
       "COUNT(e) as totalCount, " +
