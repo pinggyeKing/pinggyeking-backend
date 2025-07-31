@@ -24,16 +24,14 @@ jobs:
         uses: webfactory/ssh-agent@v0.5.4
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          
+
       - name: Copy files to server
         run: |
           ssh -o StrictHostKeyChecking=no \
-            -o IdentityAgent=$SSH_AUTH_SOCK \
             ${{ secrets.NCP_USER }}@${{ secrets.NCP_HOST }} \
             "sudo mkdir -p /root/app && sudo chown ${{ secrets.NCP_USER }} /root/app"
           
           scp -o StrictHostKeyChecking=no \
-            -o IdentityAgent=$SSH_AUTH_SOCK \
             build/libs/pinggye-wang-0.0.1-SNAPSHOT.jar \
             docker-compose.yml \
             scripts/deploy.sh \
