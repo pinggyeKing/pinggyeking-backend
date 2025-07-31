@@ -25,10 +25,15 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Debug List workspace files
+      - name: Debug Check JAR presence
         run: |
-          echo "📂 Root directory:"
-          ls -R .
+          echo "Looking for exact JAR path:"
+          if [ -f build/libs/pinggye-wang-0.0.1-SNAPSHOT.jar ]; then
+            echo "✅ Found build/libs/pinggye-wang-0.0.1-SNAPSHOT.jar"
+            ls -lh build/libs/pinggye-wang-0.0.1-SNAPSHOT.jar
+          else
+            echo "❌ JAR not found!"
+          fi
 
       # 1) JAR 파일 복사 (scp-action)
       - name: Copy files to server
@@ -39,9 +44,9 @@ jobs:
           key:      ${{ secrets.SSH_PRIVATE_KEY }}
           port:     22
           source: |
-            build/libs/pinggye-wang-0.0.1-SNAPSHOT.jar
-            docker-compose.yml
-            scripts/deploy.sh
+            ./build/libs/pinggye-wang-0.0.1-SNAPSHOT.jar
+            ./docker-compose.yml
+            ./scripts/deploy.sh
           target:   "/root/app/"
           overwrite: true
           rm: false
