@@ -49,4 +49,4 @@ jobs:
           script: |
             cd /root/app
             chmod +x scripts/deploy.sh
-            ./scripts/deploy.sh
+            ./deploy.sh
