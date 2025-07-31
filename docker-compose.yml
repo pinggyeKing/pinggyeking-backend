@@ -51,7 +51,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=1234
 
     volumes:
-      - ./build/libs/pinggye-wang-0.0.1-SNAPSHOT.jar:/app/app.jar
+      - ./pinggye-wang-0.0.1-SNAPSHOT.jar:/app/app.jar
     command:
       - "java"
       - "-jar"
