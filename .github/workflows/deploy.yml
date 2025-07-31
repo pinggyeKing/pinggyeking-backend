@@ -25,6 +25,11 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      - name: Debug List workspace files
+        run: |
+          echo "📂 Root directory:"
+          ls -R .
+
       # 1) JAR 파일 복사 (scp-action)
       - name: Copy files to server
         uses: appleboy/scp-action@v0.1.4
