@@ -1,22 +1,18 @@
 set -euo pipefail
 
-APP="pinggye-wang-0.0.1-SNAPSHOT.jar"
 DIR="/root/app"
+cd "$DIR"
 
-LOG="$DIR/app.log"
-PORT=8080
+echo "▶ $(date): Docker Compose 배포 시작"
 
-echo "▶ $(date): Deploy 시작"
+docker-compose down || true
 
-pkill -f "java.*$APP" || true
+docker-compose pull
+docker-compose up -d --build
 
-if [ -f "$LOG" ]; then
-  mv "$LOG" "$LOG.$(date +%Y%m%d%H%M%S)"
-  find "$DIR" -name 'app.log.*' -mtime +7 -delete
-fi
+docker-compose ps
 
-nohup java -jar "$DIR/$APP" --server.address=0.0.0.0 --server.port="$PORT" > "$LOG" 2>&1 &
+echo "▶ $(date '+%Y-%m-%d %H:%M:%S'): 최근 로그"
+docker-compose logs --tail=50
 
-echo "▶ $(date): 배포 완료 (PID $!)"
-touch /root/app/pinggye-wang-0.0.1-SNAPSHOT.jar
-echo "Deployed at $(date '+%Y-%m-%d %H:%M:%S')" >> /root/app/deploy.log
+echo "▶ $(date '+%Y-%m-%d %H:%M:%S'): 배포 완료"
