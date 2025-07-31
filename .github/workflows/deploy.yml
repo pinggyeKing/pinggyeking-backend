@@ -24,32 +24,20 @@ jobs:
         uses: webfactory/ssh-agent@v0.5.4
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Debug Check JAR presence
-        run: |
-          echo "Looking for exact JAR path:"
-          if [ -f build/libs/pinggye-wang-0.0.1-SNAPSHOT.jar ]; then
-            echo "✅ Found build/libs/pinggye-wang-0.0.1-SNAPSHOT.jar"
-            ls -lh build/libs/pinggye-wang-0.0.1-SNAPSHOT.jar
-          else
-            echo "❌ JAR not found!"
-          fi
-
-      # 1) JAR 파일 복사 (scp-action)
+          
       - name: Copy files to server
         run: |
-          echo "$SSH_PRIVATE_KEY" > key.pem
-          chmod 600 key.pem
-          ssh -i key.pem -o StrictHostKeyChecking=no \
-            ${{ secrets.NCP_USER }}@${{ secrets.NCP_HOST }} "sudo mkdir -p /root/app && sudo chown ${{ secrets.NCP_USER }} /root/app"
-          scp -i key.pem -o StrictHostKeyChecking=no \
+          ssh -o StrictHostKeyChecking=no \
+            -o IdentityAgent=$SSH_AUTH_SOCK \
+            ${{ secrets.NCP_USER }}@${{ secrets.NCP_HOST }} \
+            "sudo mkdir -p /root/app && sudo chown ${{ secrets.NCP_USER }} /root/app"
+          
+          scp -o StrictHostKeyChecking=no \
+            -o IdentityAgent=$SSH_AUTH_SOCK \
             build/libs/pinggye-wang-0.0.1-SNAPSHOT.jar \
             docker-compose.yml \
             scripts/deploy.sh \
             ${{ secrets.NCP_USER }}@${{ secrets.NCP_HOST }}:/root/app/
-          rm key.pem
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
       # 2) 배포 스크립트 실행 (ssh-action)
       - name: Deploy on NCP
