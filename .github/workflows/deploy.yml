@@ -37,20 +37,19 @@ jobs:
 
       # 1) JAR 파일 복사 (scp-action)
       - name: Copy files to server
-        uses: appleboy/scp-action@v0.1.4
-        with:
-          host:     ${{ secrets.NCP_HOST }}
-          username: ${{ secrets.NCP_USER }}
-          key:      ${{ secrets.SSH_PRIVATE_KEY }}
-          port:     22
-          source: |
-            ./build/libs/pinggye-wang-0.0.1-SNAPSHOT.jar
-            ./docker-compose.yml
-            ./scripts/deploy.sh
-          target:   "/root/app/"
-          overwrite: true
-          rm: false
-          debug: true
+        run: |
+          echo "$SSH_PRIVATE_KEY" > key.pem
+          chmod 600 key.pem
+          ssh -i key.pem -o StrictHostKeyChecking=no \
+            ${{ secrets.NCP_USER }}@${{ secrets.NCP_HOST }} "sudo mkdir -p /root/app && sudo chown ${{ secrets.NCP_USER }} /root/app"
+          scp -i key.pem -o StrictHostKeyChecking=no \
+            build/libs/pinggye-wang-0.0.1-SNAPSHOT.jar \
+            docker-compose.yml \
+            scripts/deploy.sh \
+            ${{ secrets.NCP_USER }}@${{ secrets.NCP_HOST }}:/root/app/
+          rm key.pem
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
       # 2) 배포 스크립트 실행 (ssh-action)
       - name: Deploy on NCP
