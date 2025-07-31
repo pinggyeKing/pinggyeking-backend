@@ -48,5 +48,5 @@ jobs:
           debug: true
           script: |
             cd /root/app
-            chmod +x scripts/deploy.sh
+            chmod +x deploy.sh
             ./deploy.sh
