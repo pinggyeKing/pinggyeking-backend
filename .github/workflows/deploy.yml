@@ -45,6 +45,7 @@ jobs:
           username: ${{ secrets.NCP_USER }}
           key:      ${{ secrets.SSH_PRIVATE_KEY }}
           port:     22
+          debug: true
           script: |
             cd /root/app
             chmod +x scripts/deploy.sh
