@@ -17,7 +17,7 @@ services:
 
     # 포트 매핑 (호스트:컨테이너)
     ports:
-      - "3307:3306"                     # 호스트의 3307 포트를 컨테이너의 3306 포트에 연결
+      - "3306:3306"                     # 호스트의 3307 포트를 컨테이너의 3306 포트에 연결
 
     # 데이터 영구 저장을 위한 볼륨 마운트
     volumes:
@@ -46,7 +46,7 @@ services:
     # Spring Boot 애플리케이션에 전달할 환경변수들
     environment:
       # host.docker.internal을 사용해서 호스트의 MySQL에 접근
-      - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3307/pinggyewang_dev?useSSL=false&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-container:3306/pinggyewang_dev?useSSL=false&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=1234
 

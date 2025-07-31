@@ -26,14 +26,17 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       # 1) JAR 파일 복사 (scp-action)
-      - name: Copy JAR to server
+      - name: Copy files to server
         uses: appleboy/scp-action@v0.1.4
         with:
           host:     ${{ secrets.NCP_HOST }}
           username: ${{ secrets.NCP_USER }}
           key:      ${{ secrets.SSH_PRIVATE_KEY }}
           port:     22
-          source:   "build/libs/*.jar"
+          source: |
+            build/libs/*.jar
+            docker-compose.yml
+            scripts/deploy.sh
           target:   "/root/app/"
           overwrite: true
           rm: false
@@ -49,5 +52,5 @@ jobs:
           port:     22
           script: |
             cd /root/app
-            chmod +x deploy.sh
-            ./deploy.sh
+            chmod +x scripts/deploy.sh
+            ./scripts/deploy.sh
