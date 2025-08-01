@@ -1,64 +1,42 @@
-# Docker Compose 파일 버전
 version: '3.8'
 
-# 실행할 서비스들 정의
 services:
-  # MySQL 데이터베이스 서비스
   mysql:
-    image: mysql:8.0                    # MySQL 8.0 공식 이미지 사용
-    container_name: mysql-container     # 컨테이너 이름을 mysql-container로 지정
+    image: mysql:8.0
+    container_name: mysql-container
 
-    # MySQL 초기 설정을 위한 환경변수들
     environment:
       MYSQL_ROOT_PASSWORD: "1234"
       MYSQL_DATABASE: pinggyewang_dev
       MYSQL_USER: pinggyewang_user
       MYSQL_PASSWORD: pinggyewang_pass
 
-    # 포트 매핑 (호스트:컨테이너)
     ports:
-      - "3306:3306"                     # 호스트의 3307 포트를 컨테이너의 3306 포트에 연결
+      - "3307:3306"
 
-    # 데이터 영구 저장을 위한 볼륨 마운트
     volumes:
-      - mysql_data:/var/lib/mysql       # mysql_data 볼륨을 MySQL 데이터 디렉토리에 마운트
+      - mysql_data:/var/lib/mysql
 
-    # MySQL이 완전히 준비되었는지 확인하는 헬스체크
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]  # mysqladmin ping 명령으로 상태 확인
-      timeout: 20s                      # 각 체크마다 20초 타임아웃 설정
-      retries: 10                       # 최대 10번까지 재시도
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
 
-  # Spring Boot 애플리케이션 서비스
   spring-app:
-    image: openjdk:17-jdk-slim          # 미리 빌드된 OpenJDK 베이스 이미지
-    container_name: spring-app          # 컨테이너 이름을 spring-app으로 지정
+    build: .                            # Dockerfile을 사용해서 빌드
+    container_name: spring-app
 
-    # 포트 매핑
     ports:
-      - "8080:8080"                     # 호스트의 8080 포트를 컨테이너의 8080 포트에 연결
+      - "8080:8080"
 
-    # 서비스 시작 순서 제어
     depends_on:
       mysql:
-        condition: service_healthy      # MySQL이 healthy 상태가 될 때까지 기다린 후 시작
+        condition: service_healthy
 
-    # Spring Boot 애플리케이션에 전달할 환경변수들
     environment:
-      # host.docker.internal을 사용해서 호스트의 MySQL에 접근
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-container:3306/pinggyewang_dev?useSSL=false&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=1234
 
-    volumes:
-      - ./pinggye-wang-0.0.1-SNAPSHOT.jar:/app/app.jar
-    command:
-      - "java"
-      - "-jar"
-      - "/app/app.jar"
-      - "--server.address=0.0.0.0"
-      - "--server.port=8080"
-
-# 데이터 영구 저장을 위한 볼륨 정의
 volumes:
-  mysql_data: # mysql_data라는 이름의 볼륨 생성 (DB 데이터 보존용)
+  mysql_data:
