@@ -1,15 +1,18 @@
 package com.swyp10.pinggyewang.service;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.swyp10.pinggyewang.dto.request.ExcuseRequest;
 import com.swyp10.pinggyewang.dto.response.ExcuseResponse;
+import com.swyp10.pinggyewang.dto.response.WithImageResponse;
 import com.swyp10.pinggyewang.exception.ClovaException;
 import com.swyp10.pinggyewang.exception.CustomErrorCode;
 import com.swyp10.pinggyewang.repository.ExcuseRepository;
 import java.time.Duration;
 import java.util.regex.Pattern;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
@@ -45,19 +48,24 @@ public class ClovaService implements ExcuseGenerator {
     this.objectMapper = objectMapper;
     this.systemPrompt = systemPrompt;
     this.excuseRepository = excuseRepository;
+
+    objectMapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
+    objectMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
+    objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
+    objectMapper.configure(JsonParser.Feature.ALLOW_TRAILING_COMMA, true);
   }
 
   @Override
-  public ExcuseResponse generateSentence(final ExcuseRequest request) {
+  public WithImageResponse generateSentence(final ExcuseRequest request) {
     try {
       String requestBody = buildRequestBody(request);
       String apiResponse = callClovaApi(requestBody);
       String extractedContent = extractContentFromResponse(apiResponse);
-      ExcuseResponse response = parseExcuseResponse(extractedContent);
 
-      excuseRepository.save(response.toExcuse(request.isRegenerated()));
+      WithImageResponse wrapper = parseWithImageResponse(extractedContent);
+      excuseRepository.save(wrapper.excuse().toExcuse(request.isRegenerated()));
 
-      return response;
+      return wrapper;
     } catch (Exception e) {
       throw new ClovaException(CustomErrorCode.CLOVA_EXCEPTION);
     }
@@ -130,14 +138,21 @@ public class ClovaService implements ExcuseGenerator {
     }
   }
 
-  private ExcuseResponse parseExcuseResponse(String jsonContent) throws JsonProcessingException {
-    try {
-      ExcuseResponse response = objectMapper.readValue(jsonContent, ExcuseResponse.class);
-      validateResponse(response);
-      return response;
+  private WithImageResponse parseWithImageResponse(String jsonContent) {
 
-    } catch (JsonProcessingException e) {
-      throw new ClovaException(CustomErrorCode.CLOVA_JSON_PARSE_EXCEPTION);
-    }
+       try {
+
+         JsonNode root     = objectMapper.readTree(jsonContent);
+         JsonNode actual = root.isTextual() ? objectMapper.readTree(root.textValue()) : root;
+
+         ExcuseResponse excuse = objectMapper.treeToValue(actual, ExcuseResponse.class);
+
+         String imageKey = actual.path("imageKey").asText(null);
+
+         validateResponse(excuse);
+         return new WithImageResponse(excuse, imageKey);
+       } catch (JsonProcessingException e) {
+           throw new ClovaException(CustomErrorCode.CLOVA_JSON_PARSE_EXCEPTION);
+       }
   }
 }

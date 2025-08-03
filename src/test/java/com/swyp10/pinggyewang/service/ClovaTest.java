@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.swyp10.pinggyewang.dto.request.ExcuseRequest;
 import com.swyp10.pinggyewang.dto.request.QuestionRequest;
 import com.swyp10.pinggyewang.dto.response.ExcuseResponse;
+import com.swyp10.pinggyewang.dto.response.WithImageResponse;
 import com.swyp10.pinggyewang.service.mock.MockExcuseGenerator;
 import com.swyp10.pinggyewang.service.mock.TestClovaService;
 import org.junit.jupiter.api.Test;
@@ -42,13 +43,13 @@ class ClovaTest {
 
         ExcuseRequest request = new ExcuseRequest(situation, target, tone, isRegenerated, regeneratedBtnVal, questions);
 
-        ExcuseResponse response = excuseGenerator.generateSentence(request);
+        WithImageResponse response = excuseGenerator.generateSentence(request);
 
         System.out.println("====== AI 응답 ======");
         System.out.println(response);
 
         assertThat(response.excuse()).isNotNull();
-        assertThat(response.category()).isNotNull();
-        assertThat(response.createdAt()).isNotNull();
+        assertThat(response.excuse().category()).isNotNull();
+        assertThat(response.excuse().createdAt()).isNotNull();
     }
 }

@@ -2,6 +2,7 @@ package com.swyp10.pinggyewang.service.mock;
 
 import com.swyp10.pinggyewang.dto.request.ExcuseRequest;
 import com.swyp10.pinggyewang.dto.response.ExcuseResponse;
+import com.swyp10.pinggyewang.dto.response.WithImageResponse;
 import com.swyp10.pinggyewang.service.ExcuseGenerator;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,7 @@ public class TestClovaService implements ExcuseGenerator {
   }
 
   @Override
-  public ExcuseResponse generateSentence(final ExcuseRequest request) {
+  public WithImageResponse generateSentence(final ExcuseRequest request) {
     return mockExcuseGenerator.generateMockResponse(request);
   }
 }
