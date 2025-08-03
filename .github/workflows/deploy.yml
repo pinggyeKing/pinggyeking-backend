@@ -2,7 +2,7 @@ name: CD to NCP Instance
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ dev, feature-fix ]
 
 jobs:
   build-and-deploy:
@@ -28,23 +28,24 @@ jobs:
       - name: Copy files to server
         run: |
           ssh -o StrictHostKeyChecking=no \
-            ${{ secrets.NCP_USER }}@${{ secrets.NCP_HOST }} \
-            "sudo mkdir -p /root/app && sudo chown ${{ secrets.NCP_USER }} /root/app"
+          ${{ secrets.NCP_USER }}@${{ secrets.NCP_HOST }} \
+          "sudo mkdir -p /root/app && sudo chown ${{ secrets.NCP_USER }} /root/app"
           
           scp -o StrictHostKeyChecking=no \
-            build/libs/pinggye-wang-0.0.1-SNAPSHOT.jar \
-            docker-compose.yml \
-            scripts/deploy.sh \
-            ${{ secrets.NCP_USER }}@${{ secrets.NCP_HOST }}:/root/app/
+          build/libs/pinggye-wang-0.0.1-SNAPSHOT.jar \
+          docker-compose.yml \
+          Dockerfile \
+          scripts/deploy.sh \
+          ${{ secrets.NCP_USER }}@${{ secrets.NCP_HOST }}:/root/app/
 
       # 2) 배포 스크립트 실행 (ssh-action)
       - name: Deploy on NCP
         uses: appleboy/ssh-action@v0.1.8
         with:
-          host:     ${{ secrets.NCP_HOST }}
+          host: ${{ secrets.NCP_HOST }}
           username: ${{ secrets.NCP_USER }}
-          key:      ${{ secrets.SSH_PRIVATE_KEY }}
-          port:     22
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
           debug: true
           script: |
             cd /root/app
