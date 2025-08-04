@@ -1,5 +1,8 @@
 package com.swyp10.pinggyewang.exception;
 
+import lombok.Getter;
+
+@Getter
 public class CustomErrorResponse {
 
   private final int status;
@@ -20,17 +23,5 @@ public class CustomErrorResponse {
   public static CustomErrorResponse of(RuntimeException errorCode) {
     return new CustomErrorResponse(CustomErrorCode.INTERNAL_SERVER_ERROR.getStatus(),
         CustomErrorCode.INTERNAL_SERVER_ERROR.getMessage(), errorCode.getMessage());
-  }
-
-  public int getStatus() {
-    return status;
-  }
-
-  public String getErrorCode() {
-    return errorCode;
-  }
-
-  public String getErrorMessage() {
-    return errorMessage;
   }
 }

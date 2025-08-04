@@ -2,6 +2,8 @@ FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
+COPY . .
+RUN ./gradlew clean build --no-daemon
 COPY build/libs/*.jar app.jar
 
 # 포트 노출
