@@ -14,7 +14,7 @@ spring:
 
 logging:
   level:
-    com.swyp10.pinggyewang: DEBUG
+    com.swyp10.pinggyewang: debug
 
 jwt:
   secret: testsecretkey1234567890testsecretkey1234567890testsecretkey1234567890

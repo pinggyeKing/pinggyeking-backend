@@ -1,5 +1,6 @@
 package com.swyp10.pinggyewang.service.mock;
 
+import com.swyp10.pinggyewang.domain.Target;
 import com.swyp10.pinggyewang.dto.request.ExcuseRequest;
 import com.swyp10.pinggyewang.dto.response.ExcuseResponse;
 import java.time.LocalDateTime;
@@ -15,7 +16,7 @@ public class MockExcuseGenerator {
   public WithImageResponse generateMockResponse(ExcuseRequest request) {
       ExcuseResponse testData = new ExcuseResponse(
               "회의에 늦음",  // situation
-              request.target(),  // target (요청에서 받은 값 사용)
+              Target.of(request.target()),  // target (요청에서 받은 값 사용)
               request.tone(),    // tone (요청에서 받은 값 사용)
               "죄송합니다, " + request.target() + ". 오늘 아침 교통 상황이 예상보다 훨씬 나빠서 회의에 늦게 도착했습니다.",  // excuse
               "교통 상황은 예측하기 어려운 경우가 많으며, 출근길 교통 체증은 많은 사람들이 겪는 문제이므로 믿을 만한 이유입니다.",  // credibilityWhy

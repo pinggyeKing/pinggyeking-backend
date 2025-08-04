@@ -59,14 +59,18 @@ public class ClovaService implements ExcuseGenerator {
   public WithImageResponse generateSentence(final ExcuseRequest request) {
     try {
       String requestBody = buildRequestBody(request);
+
       String apiResponse = callClovaApi(requestBody);
+
       String extractedContent = extractContentFromResponse(apiResponse);
 
       WithImageResponse wrapper = parseWithImageResponse(extractedContent);
+
       excuseRepository.save(wrapper.excuse().toExcuse(request.isRegenerated()));
 
       return wrapper;
     } catch (Exception e) {
+      e.printStackTrace();
       throw new ClovaException(CustomErrorCode.CLOVA_EXCEPTION);
     }
   }
@@ -139,9 +143,7 @@ public class ClovaService implements ExcuseGenerator {
   }
 
   private WithImageResponse parseWithImageResponse(String jsonContent) {
-
        try {
-
          JsonNode root     = objectMapper.readTree(jsonContent);
          JsonNode actual = root.isTextual() ? objectMapper.readTree(root.textValue()) : root;
 

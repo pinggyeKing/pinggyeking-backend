@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.swyp10.pinggyewang.domain.Excuse;
+import com.swyp10.pinggyewang.domain.Target;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record ExcuseResponse(
     String situation,
-    String target,
+    Target target,
     String tone,
     String excuse,
     String credibilityWhy,
@@ -84,7 +85,7 @@ public record ExcuseResponse(
         }
         try {
             ObjectMapper mapper = new ObjectMapper();
-            return mapper.readValue(json, new TypeReference<List<String>>() {});
+            return mapper.readValue(json, new TypeReference<>() {});
         } catch (JsonProcessingException e) {
             return List.of();
         }

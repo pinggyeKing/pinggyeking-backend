@@ -1,6 +1,7 @@
 package com.swyp10.pinggyewang.service;
 
 import com.swyp10.pinggyewang.domain.Excuse;
+import com.swyp10.pinggyewang.domain.Target;
 import com.swyp10.pinggyewang.dto.response.ExcuseCountResponse;
 import com.swyp10.pinggyewang.dto.response.ExcuseResponse;
 import com.swyp10.pinggyewang.repository.ExcuseRepository;
@@ -52,7 +53,7 @@ class ExcuseServiceTest {
   void findAll_성공() {
     Excuse excuse = Excuse.builder()
         .situation("회사")
-        .target("상사")
+        .target(Target.BOSS_SENIOR)
         .tone("정중한")
         .excuse("교통체증으로 늦었습니다")
         .credibilityWhy("실제로 교통체증이 심했음")
