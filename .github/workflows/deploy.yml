@@ -30,8 +30,10 @@ jobs:
           ssh -o StrictHostKeyChecking=no \
           ${{ secrets.NCP_USER }}@${{ secrets.NCP_HOST }} \
           "sudo mkdir -p /root/app && sudo chown ${{ secrets.NCP_USER }} /root/app"
-          
+      
           scp -o StrictHostKeyChecking=no \
+          gradlew \
+          gradle/**/* \
           build/libs/pinggye-wang-0.0.1-SNAPSHOT.jar \
           docker-compose.yml \
           Dockerfile \
