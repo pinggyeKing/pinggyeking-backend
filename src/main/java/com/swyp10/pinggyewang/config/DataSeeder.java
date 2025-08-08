@@ -20,8 +20,6 @@ public class DataSeeder {
 
       User testUser = new User("testuser", passwordEncoder.encode("1234"), "test@gmail.com");
       userRepository.save(testUser);
-
-      System.out.println("✅ 테스트 계정이 초기화되었습니다 (email=test@gmail.com / pw=1234)");
     };
   }
 }

@@ -1,15 +1,14 @@
-version: '3.8'
-
 services:
   mysql:
     image: mysql:8.0
-    container_name: mysql-container
+    container_name: mysql-shared
+    restart: unless-stopped
 
     environment:
-      MYSQL_ROOT_PASSWORD: "1234"
+      MYSQL_ROOT_PASSWORD: "tmdnlvm7!"
       MYSQL_DATABASE: pinggyewang_dev
       MYSQL_USER: pinggyewang_user
-      MYSQL_PASSWORD: pinggyewang_pass
+      MYSQL_PASSWORD: tmdnlvm7!
 
     ports:
       - "3307:3306"
@@ -17,26 +16,28 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
 
+    command: [
+      '--character-set-server=utf8mb4',
+      '--collation-server=utf8mb4_unicode_ci',
+      '--max_connections=200',
+      '--innodb_buffer_pool_size=512M'
+    ]
+
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 20s
       retries: 10
+      interval: 30s
 
   spring-app:
-    build: .                            # Dockerfile을 사용해서 빌드
-    container_name: spring-app
-
-    ports:
-      - "8080:8080"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
 
     depends_on:
       mysql:
         condition: service_healthy
-
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-container:3306/pinggyewang_dev?useSSL=false&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=1234
 
 volumes:
   mysql_data:

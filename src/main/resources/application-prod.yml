@@ -1,14 +1,14 @@
 spring:
   datasource:
-    url: jdbc:mysql://db-35uo47-kr.vpc-pub-cdb.ntruss.com:3306/pinggyewang_dev?useSSL=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
+    url: jdbc:mysql://db-35uo47-kr.vpc-pub-cdb.ntruss.com:3306/pinggyewang_dev?useSSL=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&createDatabaseIfNotExist=true
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: swyp
+    username: root
     password: tmdnlvm7!
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: update  # 운영환경에서는 기존 데이터 유지하며 스키마 업데이트
+      ddl-auto: update
     show-sql: false
     properties:
       hibernate:
@@ -21,8 +21,8 @@ logging:
 
 clova:
   api:
-    url: YOUR_PROD_CLOVA_URL
-    key: YOUR_PROD_CLOVA_KEY
+    url: https://clovastudio.stream.ntruss.com/testapp/v3/chat-completions/HCX-005
+    key: nv-d6eadc1a642f46d2834ffdb0c1e11e07flHE
 
 server:
   port: 8080
