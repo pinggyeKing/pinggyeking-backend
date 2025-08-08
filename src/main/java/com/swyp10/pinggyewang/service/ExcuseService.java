@@ -2,12 +2,7 @@ package com.swyp10.pinggyewang.service;
 
 import com.swyp10.pinggyewang.domain.Excuse;
 import com.swyp10.pinggyewang.domain.Target;
-import com.swyp10.pinggyewang.dto.response.DayOfWeekStatsResponse;
-import com.swyp10.pinggyewang.dto.response.ExcuseCountResponse;
-import com.swyp10.pinggyewang.dto.response.ExcuseResponse;
-import com.swyp10.pinggyewang.dto.response.ExcuseStatisticsResponse;
-import com.swyp10.pinggyewang.dto.response.PeakTimeResponse;
-import com.swyp10.pinggyewang.dto.response.TargetSatisfactionResponse;
+import com.swyp10.pinggyewang.dto.response.*;
 import com.swyp10.pinggyewang.exception.ApplicationException;
 import com.swyp10.pinggyewang.repository.ExcuseRepository;
 import java.time.LocalDateTime;
@@ -15,7 +10,10 @@ import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.IntStream;
+
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -127,5 +125,10 @@ public class ExcuseService {
           return DayOfWeekStatsResponse.of(day, count);
         })
         .toList();
+  }
+
+  public ExcuseDetailReponse getExcuseDetailbyExcuseId(Long excuseId) {
+    return excuseRepository.getExcuseDetailbyExcuseId(excuseId)
+            .orElseThrow(() -> new EntityNotFoundException("excuse" + excuseId + " not found"));
   }
 }

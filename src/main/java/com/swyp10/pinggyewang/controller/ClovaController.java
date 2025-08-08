@@ -28,7 +28,7 @@ public class ClovaController {
 
     String imageKey = imageMappingService.selectImageKey(request.target(), request.tone());
 
-    WithImageResponse response = new WithImageResponse(excuse.excuse(), imageKey);
+    WithImageResponse response = new WithImageResponse(excuse.excuse(), imageKey, excuse.id());
 
     return ResponseEntity.ok(response);
   }

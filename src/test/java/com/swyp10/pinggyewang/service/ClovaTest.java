@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.swyp10.pinggyewang.domain.Target;
 import com.swyp10.pinggyewang.dto.request.ExcuseRequest;
 import com.swyp10.pinggyewang.dto.request.QuestionRequest;
 import com.swyp10.pinggyewang.dto.response.ExcuseResponse;
@@ -31,7 +32,7 @@ class ClovaTest {
     @Test
     void printApiRequestLog() throws JsonProcessingException {
         final String situation = "회의에 늦음";
-        final String target = "팀장님";
+        final Target target = Target.valueOf("TEACHER");
         final String tone = "정중하게";
         final boolean isRegenerated = false;
         final String regeneratedBtnVal="";

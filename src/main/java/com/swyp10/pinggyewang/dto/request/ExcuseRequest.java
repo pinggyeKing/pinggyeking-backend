@@ -1,9 +1,11 @@
 package com.swyp10.pinggyewang.dto.request;
 
+import com.swyp10.pinggyewang.domain.Target;
+
 import java.util.List;
 
 public record ExcuseRequest(
-    String situation, String target, String tone, boolean isRegenerated, String regeneratedBtnVal, List<QuestionRequest> questions
+        String situation, Target target, String tone, boolean isRegenerated, String regeneratedBtnVal, List<QuestionRequest> questions
 ) {
 
 }

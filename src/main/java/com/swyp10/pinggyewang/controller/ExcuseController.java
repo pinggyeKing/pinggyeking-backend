@@ -1,11 +1,10 @@
 package com.swyp10.pinggyewang.controller;
 
-import com.swyp10.pinggyewang.dto.response.DayOfWeekStatsResponse;
-import com.swyp10.pinggyewang.dto.response.ExcuseCountResponse;
-import com.swyp10.pinggyewang.dto.response.ExcuseResponse;
-import com.swyp10.pinggyewang.dto.response.TargetSatisfactionResponse;
+import com.swyp10.pinggyewang.dto.response.*;
 import com.swyp10.pinggyewang.service.ExcuseService;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,5 +51,10 @@ public class ExcuseController {
   public ResponseEntity<List<DayOfWeekStatsResponse>> getExcuseCountByDayOfWeek() {
     List<DayOfWeekStatsResponse> response = excuseService.getExcuseCountByDayOfWeek();
     return ResponseEntity.ok(response);
+  }
+
+  @GetMapping("/{excuseId}/detail")
+  public ResponseEntity<ExcuseDetailReponse> getExcuseDetail(@PathVariable final Long excuseId) {
+    return ResponseEntity.ok(excuseService.getExcuseDetailbyExcuseId(excuseId));
   }
 }
