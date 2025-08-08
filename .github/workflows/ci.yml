@@ -1,15 +1,14 @@
-name: CI
+name: CI in DEV
 
 # 브랜치 푸시나 PR 이벤트 때 실행
 on:
   push:
     branches:
-      - main
       - dev
       - feature-*
   pull_request:
     branches:
-      - main
+      - dev
 
 jobs:
   build-and-test:
