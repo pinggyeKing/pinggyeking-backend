@@ -1,9 +1,15 @@
 set -euo pipefail
 
-DIR="/root/app"
+DIR="${1:-/root/app}"
 cd "$DIR"
 
-echo "▶ $(date): Docker Compose 배포 시작"
+echo "▶ $(date): Docker Compose 배포 시작 ($DIR)"
+
+if [[ "$DIR" == "/root/app" ]]; then
+  COMPOSE_FILES="-f docker-compose.yml -f docker-compose.dev.yml"
+else
+  COMPOSE_FILES="-f docker-compose.yml -f docker-compose.prod.yml"
+fi
 
 docker-compose down || true
 

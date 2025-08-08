@@ -1,0 +1,53 @@
+name: CD to NCP Instance
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build with Gradle
+        run: |
+          chmod +x ./gradlew
+          ./gradlew clean build --no-daemon
+
+      - name: Verify artifact
+        run: ls -lh build/libs
+
+      # SSH 에이전트 설정 (키 등록)
+      - name: Setup SSH agent
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Copy files to server
+        run: |
+          ssh -o StrictHostKeyChecking=no \
+            ${{ secrets.NCP_USER }}@${{ secrets.NCP_HOST }} \
+            "sudo mkdir -p /root/app/prod && sudo chown ${{ secrets.NCP_USER }} /root/app/prod"
+          
+          scp -o StrictHostKeyChecking=no \
+            build/libs/pinggye-wang-0.0.1-SNAPSHOT.jar \
+            docker-compose.yml \
+            docker-compose.prod.yml \
+            scripts/deploy.sh \
+            ${{ secrets.NCP_USER }}@${{ secrets.NCP_HOST }}:/root/app/prod/
+
+      # 2) 배포 스크립트 실행 (ssh-action)
+      - name: Deploy on NCP
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host:     ${{ secrets.NCP_HOST }}
+          username: ${{ secrets.NCP_USER }}
+          key:      ${{ secrets.SSH_PRIVATE_KEY }}
+          port:     22
+          debug: true
+          script: |
+            cd /root/app/prod
+            chmod +x deploy.sh
+            ./deploy.sh

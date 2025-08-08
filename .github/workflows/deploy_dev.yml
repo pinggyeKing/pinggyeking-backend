@@ -2,7 +2,7 @@ name: CD to NCP Instance
 
 on:
   push:
-    branches: [ dev, feature-fix ]
+    branches: [ dev, feature-ai ]
 
 jobs:
   build-and-deploy:
@@ -37,6 +37,7 @@ jobs:
           scp -o StrictHostKeyChecking=no \
           app.jar \
           docker-compose.yml \
+          docker-compose.dev.yml \
           Dockerfile \
           scripts/deploy.sh \
           ${{ secrets.NCP_USER }}@${{ secrets.NCP_HOST }}:/root/app/
