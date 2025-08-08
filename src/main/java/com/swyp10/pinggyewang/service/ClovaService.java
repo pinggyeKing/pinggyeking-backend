@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.swyp10.pinggyewang.domain.Excuse;
 import com.swyp10.pinggyewang.dto.request.ExcuseRequest;
 import com.swyp10.pinggyewang.dto.response.ExcuseResponse;
 import com.swyp10.pinggyewang.dto.response.WithImageResponse;
@@ -66,9 +67,10 @@ public class ClovaService implements ExcuseGenerator {
 
       WithImageResponse wrapper = parseWithImageResponse(extractedContent);
 
-      excuseRepository.save(wrapper.excuse().toExcuse(request.isRegenerated()));
+      Excuse saved = excuseRepository.save(wrapper.excuse().toExcuse(request.isRegenerated()));
+      Long id = saved.getId();
 
-      return wrapper;
+      return WithImageResponse.of(wrapper.excuse(), wrapper.imageKey(), id);
     } catch (Exception e) {
       e.printStackTrace();
       throw new ClovaException(CustomErrorCode.CLOVA_EXCEPTION);
@@ -152,7 +154,7 @@ public class ClovaService implements ExcuseGenerator {
          String imageKey = actual.path("imageKey").asText(null);
 
          validateResponse(excuse);
-         return new WithImageResponse(excuse, imageKey);
+         return new WithImageResponse(excuse, imageKey, null);
        } catch (JsonProcessingException e) {
            throw new ClovaException(CustomErrorCode.CLOVA_JSON_PARSE_EXCEPTION);
        }

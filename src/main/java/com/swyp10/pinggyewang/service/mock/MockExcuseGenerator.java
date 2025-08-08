@@ -34,6 +34,6 @@ public class MockExcuseGenerator {
 
       String imageKey = "B";
 
-      return new WithImageResponse(testData, imageKey);
+      return new WithImageResponse(testData, imageKey, null);
   }
 }
