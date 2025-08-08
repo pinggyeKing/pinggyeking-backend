@@ -23,24 +23,12 @@ public enum Target {
 
   @JsonCreator
   public static Target of(String name) {
-
-    if (name == null) return OTHER;
-    String s = name.trim();
-    if (s.isEmpty()) return OTHER;
-
     for (Target target : values()) {
       if (target.name.equals(name) ||
           target.name.contains(name)) {
         return target;
       }
     }
-
-    for (Target target : values()) {
-      if (target.getName().equals(s) || target.getName().contains(s)) {
-        return target;
-      }
-    }
-
     return OTHER;
   }
 }
