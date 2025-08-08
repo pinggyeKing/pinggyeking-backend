@@ -3,6 +3,7 @@ package com.swyp10.pinggyewang.domain;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import lombok.Builder;
+import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -10,10 +11,8 @@ import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "excuses")
+@Getter
 public class Excuse {
-
-  public Excuse() {
-  }
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,8 +21,9 @@ public class Excuse {
   @Column(name = "situation", nullable = false, length = 500)
   private String situation;
 
-  @Column(name = "target", nullable = false, length = 100)
-  private String target;
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private Target target;
 
   @Column(name = "tone", nullable = false, length = 50)
   private String tone;
@@ -55,6 +55,12 @@ public class Excuse {
   @Column(name = "is_regenerated", columnDefinition = "TINYINT(1)")
   private Boolean isRegenerated;
 
+  @Column(name = "has_image", columnDefinition = "TINYINT(1)")
+  private Boolean hasImage = false;
+
+  @Column(name = "user_liked")
+  private Boolean userLiked; // null=무응답, true=좋아요, false=싫어요
+
   @CreationTimestamp
   @Column(name = "created_at", nullable = false, updatable = false)
   private LocalDateTime createdAt;
@@ -63,8 +69,19 @@ public class Excuse {
   @Column(name = "updated_at")
   private LocalDateTime updatedAt;
 
+  public void updateImageStatus(Boolean hasImage) {
+    this.hasImage = hasImage;
+  }
+
+  public void updateLike(Boolean liked) {
+    this.userLiked = liked;
+  }
+
+  public Excuse() {
+  }
+
   @Builder
-  public Excuse(String situation, String target, String tone, String excuse,
+  public Excuse(String situation, Target target, String tone, String excuse,
       String credibilityWhy, Double credibilityScore, String category,
       String keywords, String alternatives, Integer tokensUsed,
       Long responseTimeMs, Boolean isRegenerated) {
@@ -80,65 +97,5 @@ public class Excuse {
     this.tokensUsed = tokensUsed;
     this.responseTimeMs = responseTimeMs;
     this.isRegenerated = isRegenerated;
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public String getSituation() {
-    return situation;
-  }
-
-  public String getTarget() {
-    return target;
-  }
-
-  public String getTone() {
-    return tone;
-  }
-
-  public String getExcuse() {
-    return excuse;
-  }
-
-  public String getCredibilityWhy() {
-    return credibilityWhy;
-  }
-
-  public Double getCredibilityScore() {
-    return credibilityScore;
-  }
-
-  public String getCategory() {
-    return category;
-  }
-
-  public String getKeywords() {
-    return keywords;
-  }
-
-  public String getAlternatives() {
-    return alternatives;
-  }
-
-  public Integer getTokensUsed() {
-    return tokensUsed;
-  }
-
-  public Long getResponseTimeMs() {
-    return responseTimeMs;
-  }
-
-  public LocalDateTime getCreatedAt() {
-    return createdAt;
-  }
-
-  public LocalDateTime getUpdatedAt() {
-    return updatedAt;
-  }
-
-  public Boolean getIsRegenerated() {
-    return isRegenerated;
   }
 }

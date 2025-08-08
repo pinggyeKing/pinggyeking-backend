@@ -1,8 +1,9 @@
 package com.swyp10.pinggyewang.controller;
 
 import com.swyp10.pinggyewang.dto.request.ExcuseRequest;
-import com.swyp10.pinggyewang.dto.response.ExcuseResponse;
+import com.swyp10.pinggyewang.dto.response.WithImageResponse;
 import com.swyp10.pinggyewang.service.ExcuseGenerator;
+import com.swyp10.pinggyewang.service.ImageMappingService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,13 +14,22 @@ public class ClovaController {
 
   private final ExcuseGenerator excuseGenerator;
 
-  public ClovaController(ExcuseGenerator excuseGenerator) {
+  private final ImageMappingService imageMappingService;
+
+  public ClovaController(ExcuseGenerator excuseGenerator, ImageMappingService imageMappingService) {
     this.excuseGenerator = excuseGenerator;
+      this.imageMappingService = imageMappingService;
   }
 
   @PostMapping("/api/clova/generate")
-  public ResponseEntity<ExcuseResponse> textGenerate(@RequestBody ExcuseRequest request) {
-    ExcuseResponse response = excuseGenerator.generateSentence(request);
+  public ResponseEntity<WithImageResponse> textGenerate(@RequestBody ExcuseRequest request) {
+
+    WithImageResponse excuse = excuseGenerator.generateSentence(request);
+
+    String imageKey = imageMappingService.selectImageKey(request.target(), request.tone());
+
+    WithImageResponse response = new WithImageResponse(excuse.excuse(), imageKey, excuse.id());
+
     return ResponseEntity.ok(response);
   }
 }

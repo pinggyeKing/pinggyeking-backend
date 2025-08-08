@@ -1,9 +1,11 @@
 package com.swyp10.pinggyewang.service;
 
 import com.swyp10.pinggyewang.domain.Excuse;
+import com.swyp10.pinggyewang.domain.Target;
 import com.swyp10.pinggyewang.dto.response.ExcuseCountResponse;
 import com.swyp10.pinggyewang.dto.response.ExcuseResponse;
 import com.swyp10.pinggyewang.repository.ExcuseRepository;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -39,7 +41,7 @@ class ExcuseServiceTest {
 
   @Test
   void getTodayCount_성공() {
-    given(excuseRepository.countByCreatedAtBetween(any(OffsetDateTime.class), any(OffsetDateTime.class)))
+    given(excuseRepository.countByCreatedAtBetween(any(LocalDateTime.class), any(LocalDateTime.class)))
         .willReturn(5L);
 
     ExcuseCountResponse result = excuseService.getTodayCount();
@@ -51,7 +53,7 @@ class ExcuseServiceTest {
   void findAll_성공() {
     Excuse excuse = Excuse.builder()
         .situation("회사")
-        .target("상사")
+        .target(Target.BOSS_SENIOR)
         .tone("정중한")
         .excuse("교통체증으로 늦었습니다")
         .credibilityWhy("실제로 교통체증이 심했음")
