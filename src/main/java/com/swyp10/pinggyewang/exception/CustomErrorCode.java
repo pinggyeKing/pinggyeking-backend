@@ -1,0 +1,51 @@
+package com.swyp10.pinggyewang.exception;
+
+public enum CustomErrorCode {
+
+  INTERNAL_SERVER_ERROR(500, "COMMON_001", "내부 서버 오류가 발생했습니다."),
+  PASSWORD_NOT_MATCHES(404, "PW_001", "비밀번호가 일치하지 않습니다."),
+  NOT_FOUNT_USER(404, "USER_001", "해당 이메일의 유저를 찾을 수 없습니다."),
+
+  // 피드백 관련 예외
+  RATING_REQUIRED(400, "FEEDBACK_001", "평점은 필수입니다."),
+  INVALID_RATING_VALUE(400, "FEEDBACK_004", "평점 값이 올바르지 않습니다."),
+  FEEDBACK_CONTENT_REQUIRED(400, "FEEDBACK_002", "피드백 내용은 필수입니다."),
+  FEEDBACK_CONTENT_TOO_LONG(400, "FEEDBACK_003", "피드백은 1000자 이하로 작성해주세요."),
+
+  // CLOVA API 관련 예외
+  CLOVA_EXCEPTION(500, "CLOVA_001", "변명 생성 중 오류가 발생했습니다"),
+  CLOVA_RESPONSE_EMPTY(400, "CLOVA_002", "Clova API가 빈 응답을 반환했습니다"),
+  CLOVA_CONTENT_NOT_FOUND(400, "CLOVA_003", "응답에서 content 필드를 찾을 수 없습니다"),
+  CLOVA_EXCUSE_EMPTY(400, "CLOVA_005", "변명이 비어있습니다."),
+  CLOVA_JSON_PARSE_EXCEPTION(400, "CLOVA_004", "Clova Json 파싱에 실패했습니다."),
+
+  // 새로 추가된 예외들
+  INVALID_DATA_FORMAT(400, "DATA_001", "데이터 형식이 올바르지 않습니다."),
+  DATABASE_ERROR(500, "DB_001", "데이터베이스 처리 중 오류가 발생했습니다."),
+  JSON_PARSING_ERROR(500, "JSON_001", "JSON 파싱 중 오류가 발생했습니다."),
+  CLOVA_CLIENT_ERROR(400, "CLOVA_006", "Clova API 요청에 문제가 있습니다."),
+  CLOVA_SERVER_ERROR(500, "CLOVA_007", "Clova API 서버에서 오류가 발생했습니다."),
+  NETWORK_ERROR(500, "NETWORK_001", "네트워크 연결에 문제가 발생했습니다.");
+
+  private final int status;
+  private final String code;
+  private final String message;
+
+  CustomErrorCode(int status, String code, String message) {
+    this.status = status;
+    this.code = code;
+    this.message = message;
+  }
+
+  public int getStatus() {
+    return status;
+  }
+
+  public String getCode() {
+    return code;
+  }
+
+  public String getMessage() {
+    return message;
+  }
+}

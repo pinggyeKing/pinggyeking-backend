@@ -1,0 +1,24 @@
+services:
+  spring-app-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: spring-app-dev
+    restart: unless-stopped
+
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+
+    ports:
+      - "8080:8080"
+
+    networks:
+      - pinggyeking-network
+
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+networks:
+  pinggyeking-network:
+    external: true

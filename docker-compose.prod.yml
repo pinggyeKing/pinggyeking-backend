@@ -1,0 +1,25 @@
+services:
+  spring-app-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: spring-app-prod
+    restart: unless-stopped
+
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: false
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/pinggyewang_prod?useSSL=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: tmdnlvm7!
+
+    ports:
+      - "8081:8080"
+
+    networks:
+      - pinggyeking-network
+
+networks:
+  pinggyeking-network:
+    external: true
