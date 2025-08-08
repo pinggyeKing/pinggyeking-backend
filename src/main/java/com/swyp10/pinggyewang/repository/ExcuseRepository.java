@@ -4,8 +4,12 @@ import com.swyp10.pinggyewang.domain.Excuse;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
+
+import com.swyp10.pinggyewang.dto.response.ExcuseDetailReponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -58,4 +62,16 @@ public interface ExcuseRepository extends JpaRepository<Excuse, Long> {
         ORDER BY DAYOFWEEK(created_at)
         """, nativeQuery = true)
   List<Object[]> getExcuseCountByDayOfWeek();
+
+  @Query("""
+        SELECT new com.swyp10.pinggyewang.dto.response.ExcuseDetailReponse(
+             e.excuse,
+             e.situation,
+             e.target,
+             e.tone
+         )
+        FROM Excuse e
+        WHERE e.id = :excuseId
+    """)
+  Optional<ExcuseDetailReponse> getExcuseDetailbyExcuseId(@Param("excuseId") Long excuseId);
 }

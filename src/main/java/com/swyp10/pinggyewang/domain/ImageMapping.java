@@ -13,7 +13,7 @@ public class ImageMapping {
     private Long id;
 
     @Column(nullable = false)
-    private String target;
+    private Target target;
 
     @Column(nullable = false)
     private String tone;
@@ -29,7 +29,7 @@ public class ImageMapping {
         return tone;
     }
 
-    public String getTarget() {
+    public Target getTarget() {
         return target;
     }
 
@@ -45,7 +45,7 @@ public class ImageMapping {
         this.tone = tone;
     }
 
-    public void setTarget(String target) {
+    public void setTarget(Target target) {
         this.target = target;
     }
 
