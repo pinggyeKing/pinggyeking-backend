@@ -55,6 +55,12 @@ public class Excuse {
   @Column(name = "is_regenerated", columnDefinition = "TINYINT(1)")
   private Boolean isRegenerated;
 
+  @Column(name = "has_image", columnDefinition = "TINYINT(1)")
+  private Boolean hasImage = false;
+
+  @Column(name = "user_liked")
+  private Boolean userLiked; // null=무응답, true=좋아요, false=싫어요
+
   @CreationTimestamp
   @Column(name = "created_at", nullable = false, updatable = false)
   private LocalDateTime createdAt;
@@ -62,6 +68,14 @@ public class Excuse {
   @UpdateTimestamp
   @Column(name = "updated_at")
   private LocalDateTime updatedAt;
+
+  public void updateImageStatus(Boolean hasImage) {
+    this.hasImage = hasImage;
+  }
+
+  public void updateLike(Boolean liked) {
+    this.userLiked = liked;
+  }
 
   public Excuse() {
   }

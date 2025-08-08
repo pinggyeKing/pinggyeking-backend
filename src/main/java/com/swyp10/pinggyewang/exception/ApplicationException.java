@@ -1,15 +1,18 @@
 package com.swyp10.pinggyewang.exception;
 
+import lombok.Getter;
+
+@Getter
 public class ApplicationException extends RuntimeException {
 
-  private final CustomErrorCode errorCode;
+  private CustomErrorCode errorCode;
 
   public ApplicationException(final CustomErrorCode errorCode) {
     super(errorCode.getMessage());
     this.errorCode = errorCode;
   }
 
-  public CustomErrorCode getErrorCode() {
-    return errorCode;
+  public ApplicationException(String message) {
+    super(message);
   }
 }
