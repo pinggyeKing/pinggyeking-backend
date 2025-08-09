@@ -15,7 +15,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record ExcuseResponse(
     String situation,
-    Target target,
+    String target,
     String tone,
     String excuse,
     String credibilityWhy,
@@ -36,7 +36,7 @@ public record ExcuseResponse(
     public Excuse toExcuse(final boolean isRegenerated) {
         return Excuse.builder()
             .situation(this.situation)
-            .target(this.target)
+            .target(Target.of(this.target))
             .tone(this.tone)
             .excuse(this.excuse)
             .credibilityWhy(this.credibilityWhy)
@@ -53,7 +53,7 @@ public record ExcuseResponse(
     public static ExcuseResponse of(Excuse excuse) {
         return new ExcuseResponse(
             excuse.getSituation(),
-            excuse.getTarget(),
+            excuse.getTarget().getName(),
             excuse.getTone(),
             excuse.getExcuse(),
             excuse.getCredibilityWhy(),
