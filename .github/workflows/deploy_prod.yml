@@ -25,6 +25,11 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      - name: Prepare artifact as app.jar
+        run: |
+          cp build/libs/*SNAPSHOT.jar app.jar
+          ls -lh app.jar  # sanity check
+
       - name: Copy files to server
         run: |
           ssh -o StrictHostKeyChecking=no \
