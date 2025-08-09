@@ -32,7 +32,7 @@ jobs:
             "sudo mkdir -p /root/app/prod && sudo chown ${{ secrets.NCP_USER }} /root/app/prod"
           
           scp -o StrictHostKeyChecking=no \
-            build/libs/pinggye-wang-0.0.1-SNAPSHOT.jar \
+            app.jar \
             docker-compose.yml \
             docker-compose.prod.yml \
             scripts/deploy.sh \

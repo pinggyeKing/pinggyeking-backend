@@ -17,7 +17,7 @@ else
   DC="docker-compose"
 fi
 
-$DC $COMPOSE_FILES down || true
+$DC $COMPOSE_FILES down --remove-orphans || true
 
 $DC $COMPOSE_FILES build --pull
 
