@@ -1,5 +1,6 @@
 package com.swyp10.pinggyewang.controller;
 
+import com.swyp10.pinggyewang.domain.Target;
 import com.swyp10.pinggyewang.dto.request.ExcuseRequest;
 import com.swyp10.pinggyewang.dto.response.WithImageResponse;
 import com.swyp10.pinggyewang.service.ExcuseGenerator;
@@ -24,9 +25,11 @@ public class ClovaController {
   @PostMapping("/api/clova/generate")
   public ResponseEntity<WithImageResponse> textGenerate(@RequestBody ExcuseRequest request) {
 
+    Target enumTarget = Target.of(request.target());
+
     WithImageResponse excuse = excuseGenerator.generateSentence(request);
 
-    String imageKey = imageMappingService.selectImageKey(request.target(), request.tone());
+    String imageKey = imageMappingService.selectImageKey(enumTarget, request.tone());
 
     WithImageResponse response = new WithImageResponse(excuse.excuse(), imageKey, excuse.id());
 
