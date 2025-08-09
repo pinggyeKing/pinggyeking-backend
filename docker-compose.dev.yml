@@ -8,16 +8,18 @@ services:
 
     environment:
       SPRING_PROFILES_ACTIVE: dev
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/pinggyewang_dev?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: tmdnlvm7!
+      LANG: C.UTF-8
+      LC_ALL: C.UTF-8
+      JAVA_TOOL_OPTIONS: -Dfile.encoding=UTF-8
 
     ports:
       - "8080:8080"
 
     networks:
       - pinggyeking-network
-
-    depends_on:
-      mysql:
-        condition: service_healthy
 
 networks:
   pinggyeking-network:
