@@ -11,14 +11,21 @@ else
   COMPOSE_FILES="-f docker-compose.yml -f docker-compose.prod.yml"
 fi
 
-docker-compose down || true
+if command -v docker &>/dev/null && docker compose version &>/dev/null; then
+  DC="docker compose"
+else
+  DC="docker-compose"
+fi
 
-docker-compose pull
-docker-compose up -d --build
+$DC $COMPOSE_FILES down || true
 
-docker-compose ps
+$DC $COMPOSE_FILES build --pull
+
+$DC $COMPOSE_FILES up -d
+
+$DC $COMPOSE_FILES ps
 
 echo "▶ $(date '+%Y-%m-%d %H:%M:%S'): 최근 로그"
-docker-compose logs --tail=50
+$DC $COMPOSE_FILES logs --tail=50
 
 echo "▶ $(date '+%Y-%m-%d %H:%M:%S'): 배포 완료"
