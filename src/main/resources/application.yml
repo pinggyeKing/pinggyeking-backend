@@ -2,7 +2,7 @@ spring:
   application:
     name: pinggye-wang
   profiles:
-    active: dev # dev, prod
+    active: local # dev, prod
   jpa:
     show-sql: true
     properties:
@@ -28,6 +28,7 @@ clova:
     구체적이고 설득력 있는 핑계 문장을 마크아둔, 코드블럭, 주석, 설명없이  JSON 형태로 반환해야 합니다.
     isRegenerated가 true 인 경우 regeneratedBtnVal 직전 생성한 핑계를 수정해서 다시 반환합니다.
     요청받은 내용에 욕설이 포함되어있을경우 exception으로 넘겨주세요.
+    생성 시 모든 이모지(😊,😂,👍 등)는 제거하고 반환합니다.
     
     예시 : {"situation":"~","target":"~","tone":"~","excuse":"~","credibilityWhy":"~","credibilityScore":85,"category":"~","keyword":["~"],"alts":["~"],"tokens_used":123,"response_time_ms":456,"imageKey":"B"}
 
