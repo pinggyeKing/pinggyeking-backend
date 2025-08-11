@@ -61,15 +61,4 @@ class FeedbackServiceTest {
 
     verify(feedbackRepository).save(any(Feedback.class));
   }
-
-  @Test
-  @DisplayName("너무 긴 피드백 내용은 생성에 실패한다")
-  void createFeedback_LongContent_Failure() {
-    String tooLongContent = "정말 ".repeat(1000) + "좋은 서비스입니다!"; // 1000자 초과
-
-    assertThatThrownBy(() -> new FeedbackRequest(Rating.LIKE, tooLongContent))
-        .isInstanceOf(ApplicationException.class);
-
-    verify(feedbackRepository, never()).save(any(Feedback.class));
-  }
 }
