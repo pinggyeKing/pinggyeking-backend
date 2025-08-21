@@ -19,6 +19,10 @@ public enum CustomErrorCode {
   CLOVA_EXCUSE_EMPTY(400, "CLOVA_005", "변명이 비어있습니다."),
   CLOVA_JSON_PARSE_EXCEPTION(400, "CLOVA_004", "Clova Json 파싱에 실패했습니다."),
 
+  // 욕설, 이모지 방지 예외
+  PROFANITY_DETECTED(422, "PROFANITY_DETECTED", "부적절한 표현이 포함되어 있습니다. 적절한 표현으로 다시 작성해주세요."),
+  CONTENT_EMOJI_NOT_ALLOWED(400, "CONTENT_002", "입력에 허용되지 않는 이모지가 포함되어 있습니다."),
+
   // 새로 추가된 예외들
   INVALID_DATA_FORMAT(400, "DATA_001", "데이터 형식이 올바르지 않습니다."),
   DATABASE_ERROR(500, "DB_001", "데이터베이스 처리 중 오류가 발생했습니다."),
