@@ -8,6 +8,7 @@ import com.swyp10.pinggyewang.domain.Excuse;
 import com.swyp10.pinggyewang.dto.request.ExcuseRequest;
 import com.swyp10.pinggyewang.dto.response.ExcuseResponse;
 import com.swyp10.pinggyewang.dto.response.WithImageResponse;
+import com.swyp10.pinggyewang.exception.ApplicationException;
 import com.swyp10.pinggyewang.exception.ClovaException;
 import com.swyp10.pinggyewang.exception.CustomErrorCode;
 import com.swyp10.pinggyewang.repository.ExcuseRepository;
@@ -71,6 +72,8 @@ public class ClovaService implements ExcuseGenerator {
       Long id = saved.getId();
 
       return WithImageResponse.of(wrapper.excuse(), wrapper.imageKey(), id);
+    } catch (ApplicationException ae) {
+      throw ae;
     } catch (Exception e) {
       e.printStackTrace();
       throw new ClovaException(CustomErrorCode.CLOVA_EXCEPTION);
@@ -149,14 +152,28 @@ public class ClovaService implements ExcuseGenerator {
          JsonNode root     = objectMapper.readTree(jsonContent);
          JsonNode actual = root.isTextual() ? objectMapper.readTree(root.textValue()) : root;
 
+         if (actual.path("error").asBoolean(false)) {
+           String err = actual.path("errorCode").asText("");
+           if ("PROFANITY_DETECTED".equals(err)) {
+             throw new ClovaException(CustomErrorCode.PROFANITY_DETECTED);
+           }
+         }
+
          ExcuseResponse excuse = objectMapper.treeToValue(actual, ExcuseResponse.class);
 
          String imageKey = actual.path("imageKey").asText(null);
 
          validateResponse(excuse);
          return new WithImageResponse(excuse, imageKey, null);
-       } catch (JsonProcessingException e) {
-           throw new ClovaException(CustomErrorCode.CLOVA_JSON_PARSE_EXCEPTION);
+       } catch (ApplicationException ae) {
+         throw ae;
+       } catch (com.fasterxml.jackson.core.JsonProcessingException je) {
+         throw new ClovaException(CustomErrorCode.CLOVA_JSON_PARSE_EXCEPTION);
+       } catch (IllegalArgumentException iae) {
+         throw new ClovaException(CustomErrorCode.CLOVA_CONTENT_NOT_FOUND);
+       } catch (Exception e) {
+         e.printStackTrace();
+         throw new ClovaException(CustomErrorCode.CLOVA_EXCEPTION);
        }
   }
 }
