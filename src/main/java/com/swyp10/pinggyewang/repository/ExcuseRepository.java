@@ -6,7 +6,10 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import com.swyp10.pinggyewang.domain.Target;
+import com.swyp10.pinggyewang.dto.request.HeadTitleRequest;
 import com.swyp10.pinggyewang.dto.response.ExcuseDetailReponse;
+import com.swyp10.pinggyewang.dto.response.HeadTitleResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -74,4 +77,22 @@ public interface ExcuseRepository extends JpaRepository<Excuse, Long> {
         WHERE e.id = :excuseId
     """)
   Optional<ExcuseDetailReponse> getExcuseDetailbyExcuseId(@Param("excuseId") Long excuseId);
+
+  @Query(value = """
+      SELECT pm.content
+      FROM phrase_mapping pm
+      WHERE pm.status = 'active'
+        AND (pm.tone = :tone OR pm.tone IS NULL)
+        AND (pm.target     = :target  OR pm.target IS NULL)
+      ORDER BY
+        CASE
+          WHEN pm.tone = :tone AND pm.target = :target THEN 1
+          WHEN pm.tone = :tone AND pm.target IS NULL THEN 2
+          WHEN pm.tone IS NULL  AND pm.target = :target THEN 3
+          ELSE 4
+        END,
+        RAND()
+      LIMIT 1
+      """, nativeQuery = true)
+  String getHeadTitle(@Param("tone") String tone, @Param("target") String target);
 }

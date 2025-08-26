@@ -2,6 +2,7 @@ package com.swyp10.pinggyewang.service;
 
 import com.swyp10.pinggyewang.domain.Excuse;
 import com.swyp10.pinggyewang.domain.Target;
+import com.swyp10.pinggyewang.dto.request.HeadTitleRequest;
 import com.swyp10.pinggyewang.dto.response.*;
 import com.swyp10.pinggyewang.exception.ApplicationException;
 import com.swyp10.pinggyewang.repository.ExcuseRepository;
@@ -131,4 +132,10 @@ public class ExcuseService {
     return excuseRepository.getExcuseDetailbyExcuseId(excuseId)
             .orElseThrow(() -> new EntityNotFoundException("excuse" + excuseId + " not found"));
   }
+
+    public HeadTitleResponse getHeadTitle(HeadTitleRequest req) {
+      Target enumTarget = Target.of(req.target());
+      String content =  excuseRepository.getHeadTitle(req.tone(), enumTarget.name());
+      return new HeadTitleResponse(content != null ? content : "누군가의 찐 변명이 도착했습니다 💌");
+    }
 }
