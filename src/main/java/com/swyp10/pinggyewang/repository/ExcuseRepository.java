@@ -2,14 +2,9 @@ package com.swyp10.pinggyewang.repository;
 
 import com.swyp10.pinggyewang.domain.Excuse;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Optional;
 
-import com.swyp10.pinggyewang.domain.Target;
-import com.swyp10.pinggyewang.dto.request.HeadTitleRequest;
-import com.swyp10.pinggyewang.dto.response.ExcuseDetailReponse;
-import com.swyp10.pinggyewang.dto.response.HeadTitleResponse;
+import com.swyp10.pinggyewang.dto.request.ExcuseDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -67,7 +62,7 @@ public interface ExcuseRepository extends JpaRepository<Excuse, Long> {
   List<Object[]> getExcuseCountByDayOfWeek();
 
   @Query("""
-        SELECT new com.swyp10.pinggyewang.dto.response.ExcuseDetailReponse(
+        SELECT new com.swyp10.pinggyewang.dto.request.ExcuseDetail(
              e.excuse,
              e.situation,
              e.target,
@@ -76,7 +71,7 @@ public interface ExcuseRepository extends JpaRepository<Excuse, Long> {
         FROM Excuse e
         WHERE e.id = :excuseId
     """)
-  Optional<ExcuseDetailReponse> getExcuseDetailbyExcuseId(@Param("excuseId") Long excuseId);
+  ExcuseDetail getExcuseDetailbyExcuseId(@Param("excuseId") Long excuseId);
 
   @Query(value = """
       SELECT pm.content
