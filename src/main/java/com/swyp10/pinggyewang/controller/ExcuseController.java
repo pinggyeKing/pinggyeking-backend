@@ -54,10 +54,4 @@ public class ExcuseController {
   public ResponseEntity<ExcuseDetailReponse> getExcuseDetail(@PathVariable final Long excuseId) {
     return ResponseEntity.ok(excuseService.getExcuseDetailbyExcuseId(excuseId));
   }
-
-  @GetMapping("/result/headTitle")
-  public ResponseEntity<HeadTitleResponse> getHeadTitle(@RequestParam String target, @RequestParam String tone) {
-
-    return ResponseEntity.ok(excuseService.getHeadTitle(new HeadTitleRequest(target, tone)));
-  }
 }
