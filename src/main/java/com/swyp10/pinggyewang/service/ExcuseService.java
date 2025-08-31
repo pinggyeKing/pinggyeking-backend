@@ -2,18 +2,17 @@ package com.swyp10.pinggyewang.service;
 
 import com.swyp10.pinggyewang.domain.Excuse;
 import com.swyp10.pinggyewang.domain.Target;
+import com.swyp10.pinggyewang.dto.request.ExcuseDetail;
+import com.swyp10.pinggyewang.dto.request.HeadTitleRequest;
 import com.swyp10.pinggyewang.dto.response.*;
 import com.swyp10.pinggyewang.exception.ApplicationException;
 import com.swyp10.pinggyewang.repository.ExcuseRepository;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.IntStream;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -128,7 +127,16 @@ public class ExcuseService {
   }
 
   public ExcuseDetailReponse getExcuseDetailbyExcuseId(Long excuseId) {
-    return excuseRepository.getExcuseDetailbyExcuseId(excuseId)
-            .orElseThrow(() -> new EntityNotFoundException("excuse" + excuseId + " not found"));
+
+    ExcuseDetail detail = excuseRepository.getExcuseDetailbyExcuseId(excuseId);
+    String headTitle = excuseRepository.getHeadTitle(detail.tone(), detail.target().name());
+
+    return new ExcuseDetailReponse(
+            detail.excuse(),
+            detail.situation(),
+            detail.target(),
+            detail.tone(),
+            headTitle
+    );
   }
 }
